@@ -72,6 +72,10 @@ impl SporeHome {
         self.root.join(SCRATCH_DIR)
     }
 
+    pub fn genome_dir(&self) -> PathBuf {
+        self.root.join("genome")
+    }
+
     pub fn moltbook_dir(&self) -> PathBuf {
         self.root.join(MOLTBOOK_DIR)
     }

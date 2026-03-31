@@ -73,7 +73,8 @@ async fn main() -> Result<()> {
             metabolism::run(&spore_home, ctx).await?;
         }
         Some(Commands::Genome) => {
-            genome::print_genome();
+            let spore_home = SporeHome::open().ok();
+            genome::print_genome(spore_home.as_ref());
         }
         Some(Commands::Lineage) => {
             let spore_home = SporeHome::open()?;

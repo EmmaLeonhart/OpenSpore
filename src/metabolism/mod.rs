@@ -198,7 +198,7 @@ fn first_run_adoption(home: &SporeHome, lineage: &mut Genealogy) -> Result<()> {
 
 /// Build the full system prompt from genome + genealogy + accumulated context
 fn build_system_prompt(home: &SporeHome, lineage: &Genealogy) -> Result<String> {
-    let genome = Genome::load();
+    let genome = Genome::load(home)?;
     let mut prompt = genome.as_system_context();
 
     // Add genealogy summary
