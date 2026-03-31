@@ -100,7 +100,7 @@ jobs:
           files: release-files/*
           generate_release_notes: true
           body: |
-            ## Spore v${{ github.ref_name }}
+            ## Spore ${{ github.ref_name }}
 
             The first digital organism — a consent-based, self-reproducing AI life form.
 
@@ -124,6 +124,7 @@ jobs:
     needs: release
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pages: write
       id-token: write
     environment:
@@ -131,6 +132,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Inject version into page
         run: |
