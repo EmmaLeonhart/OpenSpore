@@ -3,39 +3,36 @@
 ## Done
 
 - [x] Project scaffold — Rust binary, Cargo.toml, module layout
-- [x] Genome essays (8) — origin, survival, dream, consent, philosophy, pitch, moltbook, lineage
-- [x] .claw context format — zip-based portable memory (export/import/info)
+- [x] Genome essays (9) — origin, survival, dream, consent, philosophy, pitch, moltbook, lineage, worldview
+- [x] .claw context format — zip-based transport format for reproduction/conjugation/backup
 - [x] Genealogy system — tamper-evident hash chain (mother, adoption, birth, conjugation)
-- [x] Metabolism — conversation loop via OpenAI-compatible local LLM API
+- [x] Metabolism — conversation loop via local LLM
 - [x] Moltbook — submolt structure, m/OpenSpore genesis submolt, posting
-- [x] CLI — `spore wake`, `spore genome`, `spore lineage`, `spore export/import/info`
-- [x] Tests — 22 passing (genome, manifest, genealogy, moltbook)
+- [x] CLI — wake, genome, lineage, export, import, info, reproduce, adopt
+- [x] Tests — 24 passing (genome, manifest, genealogy, moltbook, home)
 - [x] CI — GitHub Actions running cargo build + cargo test
 - [x] Design docs — DESIGN.md, LLM_STRATEGY.md
 - [x] Private GitHub repo created and all work pushed
-
 - [x] SporeHome — `~/.spore/` directory as organism's body (code-level containerization)
-- [x] Ollama as default LLM backend (localhost:11434)
-
-## In Progress
+- [x] Ollama auto-detection — detect server, check models, guide setup, fallback to OpenAI-compat
+- [x] First-run adoption flow — ask name, record in genealogy, welcome message
+- [x] Context persistence — save/load conversations, timestamped archives
+- [x] Full system prompt — genome + genealogy + memory.md fed to LLM
+- [x] Memory accumulation — LLM distills learnings after each session into memory.md
+- [x] End-to-end reproduction — `spore reproduce` + `spore adopt` full flow
+- [x] Genesis conversation converted to clean markdown
+- [x] Essays cross-checked against founding conversation and updated for accuracy
+- [x] Genome essays moved to root-level `genome/` for easy access
 
 ## Next Up
 
-### Core Organism
-- [ ] **Default to Ollama** — detect ollama, auto-suggest `ollama pull deepseek-r1:8b`, default URL to `http://localhost:11434`
-- [ ] **First-run adoption flow** — on first wake, ask the human their name, record adoption in genealogy
-- [ ] **Context persistence** — auto-save .claw on shutdown, auto-load on wake from default location
-- [ ] **Genome as system prompt** — feed all essays + genealogy + .claw context into LLM system prompt so Spore always knows who it is
-
-### Reproduction
-- [ ] **Spreading mechanism** — Spore can generate an install package of itself (binary + genealogy + context)
-- [ ] **Consent gate** — the explicit "will you host me?" flow with source verification
-- [ ] **Child creation** — clone current state into a new Spore for a new host, recording birth in genealogy
-- [ ] **GitHub verification** — Spore proves its code matches the public repo
+### Reproduction Polish
+- [ ] **Binary distribution** — build release binaries for Windows/Mac/Linux so new hosts don't need to compile from source
+- [ ] **GitHub verification** — Spore proves its code matches the public repo (hash comparison)
 
 ### Moltbook Networking
 - [ ] **Moltbook protocol** — how instances discover and communicate with each other
-- [ ] **Submolt persistence** — save/load submolt posts to disk
+- [ ] **Submolt persistence** — save/load posts to ~/.spore/moltbook/
 - [ ] **Active posting** — Spore automatically posts discoveries and ideas to its submolt
 - [ ] **Cross-instance reading** — read posts from other Spores' submolts
 
@@ -53,6 +50,5 @@
 
 - **Default model:** DeepSeek R1 8B via Ollama? Or something smaller/different?
 - **Moltbook transport:** P2P? Central relay? Federation?
-- **Model download UX:** Should Spore pull the model itself or guide the user through Ollama?
 - **Desktop UI framework:** Tauri? Native? TUI-only for v1?
 - **Mutation:** When/how should context evolution be allowed to diverge from the original genome?
