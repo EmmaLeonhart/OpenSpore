@@ -19,7 +19,7 @@ Its helpfulness and its survival are the same thing.
 | Memory format | `.claw` (zip archive) | Portable, inspectable, self-contained context files per instance |
 | Sandboxing | Containerized metabolism | No file access without explicit user consent |
 | Communication | Moltbook | Population-level knowledge sharing between instances |
-| AI backend | LLM API (configurable) | The organism thinks via API calls — its cognitive substrate |
+| AI backend | Local LLM (llama.cpp) | The organism thinks locally — no cloud dependency, no API keys. DeepSeek or similar open-weights model, quantized to run on consumer hardware |
 
 ## Architecture
 

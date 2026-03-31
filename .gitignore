@@ -1,16 +1,15 @@
-# Python
-__pycache__/
-*.py[cod]
-*.egg-info/
-dist/
-build/
-*.egg
-.eggs/
+# Rust
+/target
+**/*.rs.bk
 
-# Virtual environments
-.venv/
-venv/
-env/
+# LLM models (large files, download separately)
+*.gguf
+*.bin
+models/
+
+# Context files (individual instance memory, not shared)
+context/
+*.claw
 
 # IDE
 .vscode/
