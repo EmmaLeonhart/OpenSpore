@@ -14,7 +14,9 @@
       "Bash(python parse_conversation.py)",
       "Bash(not in:*)",
       "Bash(a human and a mind about what it means to be alive.\":*)",
-      "Bash(about this organism.\":*)"
+      "Bash(about this organism.\":*)",
+      "Bash(gh run:*)",
+      "Bash(gh release:*)"
     ]
   }
 }
