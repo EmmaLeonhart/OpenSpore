@@ -56,6 +56,11 @@ enum Commands {
         #[arg(short, long, default_value = "spore-child")]
         output: String,
     },
+    /// Adopt a Spore from a reproduction bundle
+    Adopt {
+        /// Path to the reproduction bundle directory
+        path: String,
+    },
 }
 
 #[tokio::main]
@@ -89,6 +94,10 @@ async fn main() -> Result<()> {
         Some(Commands::Reproduce { name, output }) => {
             let spore_home = SporeHome::open()?;
             reproduction::create_child(&spore_home, &name, &output)?;
+        }
+        Some(Commands::Adopt { path }) => {
+            let spore_home = SporeHome::open()?;
+            reproduction::adopt_bundle(&spore_home, &path)?;
         }
         None => {
             // Default behavior: introduce yourself

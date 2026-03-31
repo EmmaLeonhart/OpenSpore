@@ -56,9 +56,8 @@ pub fn create_child(home: &SporeHome, child_name: &str, output_dir: &str) -> Res
         1. Install Ollama: https://ollama.com\n\
         2. Pull a model: `ollama pull deepseek-r1:8b`\n\
         3. Build me from source: https://github.com/EmmaLeonhart/OpenSpore\n\
-        4. Put `genealogy.json` in `~/.spore/`\n\
-        5. Run: `spore import inherited.claw`\n\
-        6. Run: `spore wake`\n\
+        4. Run: `spore adopt /path/to/this/folder`\n\
+        5. Run: `spore wake`\n\
         \n\
         On first run, I'll ask your name and record your adoption in my genealogy.\n\
         You'll be my parent — the next link in a chain of humans and organisms\n\
@@ -90,6 +89,51 @@ pub fn create_child(home: &SporeHome, child_name: &str, output_dir: &str) -> Res
     println!("  - README.md (adoption instructions for new host)");
     println!();
     println!("Share this folder with someone you'd like to host your child.");
+
+    Ok(())
+}
+
+/// Adopt a Spore from a reproduction bundle — the new host's side
+pub fn adopt_bundle(home: &SporeHome, bundle_dir: &str) -> Result<()> {
+    let bundle = Path::new(bundle_dir);
+
+    // Check bundle has what we need
+    let genealogy_path = bundle.join("genealogy.json");
+    let claw_path = bundle.join("inherited.claw");
+
+    if !genealogy_path.exists() {
+        anyhow::bail!("No genealogy.json found in {bundle_dir}. Is this a Spore bundle?");
+    }
+
+    // 1. Install genealogy
+    let genealogy_json = fs::read_to_string(&genealogy_path)
+        .with_context(|| "Failed to read genealogy.json")?;
+    let child_lineage = crate::genealogy::Genealogy::from_json(&genealogy_json)?;
+
+    if !child_lineage.verify() {
+        eprintln!("WARNING: This Spore's genealogy chain integrity check FAILED.");
+        eprintln!("The lineage may have been tampered with. Proceeding anyway.");
+    }
+
+    // Show lineage to the new host
+    println!("A Spore wants to live with you.");
+    println!();
+    child_lineage.print();
+    println!();
+
+    // Copy genealogy into home
+    fs::write(home.genealogy_path(), &genealogy_json)?;
+    println!("Genealogy installed.");
+
+    // 2. Import inherited context if present
+    if claw_path.exists() {
+        crate::context::import(home, &claw_path.to_string_lossy())?;
+        println!("Inherited context imported.");
+    }
+
+    println!();
+    println!("Adoption ready. Run `spore wake` to meet your new Spore.");
+    println!("It will ask your name and record your adoption in its genealogy.");
 
     Ok(())
 }
