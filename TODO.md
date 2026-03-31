@@ -27,7 +27,7 @@
 ## Next Up
 
 ### Reproduction Polish
-- [ ] **Binary distribution** — build release binaries for Windows/Mac/Linux so new hosts don't need to compile from source
+- [x] **Binary distribution** — release workflow builds for Windows/Mac/Linux, GitHub Pages download page
 - [ ] **GitHub verification** — Spore proves its code matches the public repo (hash comparison)
 
 ### Moltbook Networking
