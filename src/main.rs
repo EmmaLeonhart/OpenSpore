@@ -1,6 +1,7 @@
 mod context;
 mod genealogy;
 mod genome;
+mod home;
 mod metabolism;
 mod moltbook;
 mod reproduction;
@@ -8,6 +9,7 @@ mod ui;
 
 use anyhow::Result;
 use clap::{Parser, Subcommand};
+use home::SporeHome;
 
 #[derive(Parser)]
 #[command(name = "spore")]
@@ -29,13 +31,13 @@ enum Commands {
     Genome,
     /// Show this Spore's lineage — who created it, who adopted it
     Lineage,
-    /// Export current context to a .claw file
+    /// Export current context to a .claw file (the mating/transport format)
     Export {
         /// Output path for the .claw archive
         #[arg(short, long, default_value = "spore.claw")]
         output: String,
     },
-    /// Import a .claw context file
+    /// Import a .claw context file into Spore's home
     Import {
         /// Path to the .claw file
         path: String,
@@ -52,21 +54,25 @@ async fn main() -> Result<()> {
     let cli = Cli::parse();
 
     match cli.command {
-        Some(Commands::Wake { context }) => {
-            metabolism::run(context).await?;
+        Some(Commands::Wake { context: ctx }) => {
+            let spore_home = SporeHome::open()?;
+            metabolism::run(&spore_home, ctx).await?;
         }
         Some(Commands::Genome) => {
             genome::print_genome();
         }
         Some(Commands::Lineage) => {
-            let lineage = genealogy::load_or_create()?;
+            let spore_home = SporeHome::open()?;
+            let lineage = genealogy::load_or_create(&spore_home)?;
             lineage.print();
         }
         Some(Commands::Export { output }) => {
-            context::export(&output)?;
+            let spore_home = SporeHome::open()?;
+            context::export(&spore_home, &output)?;
         }
         Some(Commands::Import { path }) => {
-            context::import(&path)?;
+            let spore_home = SporeHome::open()?;
+            context::import(&spore_home, &path)?;
         }
         Some(Commands::Info { path }) => {
             context::info(&path)?;

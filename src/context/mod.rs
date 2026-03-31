@@ -6,13 +6,16 @@ use std::io::{Read as _, Write as _};
 use std::path::Path;
 use zip::write::SimpleFileOptions;
 
+use crate::home::SporeHome;
+
 pub use manifest::Manifest;
 
-const CONTEXT_DIR: &str = "context";
-
-/// Export a context directory into a .claw archive
-pub fn export(output_path: &str) -> Result<()> {
-    let context_path = Path::new(CONTEXT_DIR);
+/// Export the context directory from Spore's home into a .claw archive.
+/// This is the "mating format" — you zip up context for transport
+/// (reproduction, conjugation, backup). Normally Spore works directly
+/// with the context directory.
+pub fn export(home: &SporeHome, output_path: &str) -> Result<()> {
+    let context_path = home.context_dir();
     if !context_path.exists() {
         println!("No context directory found. Nothing to export.");
         println!("(Context accumulates as Spore runs and learns.)");
@@ -26,7 +29,7 @@ pub fn export(output_path: &str) -> Result<()> {
 
     // Collect context files
     let mut context_files = Vec::new();
-    collect_files(context_path, context_path, &mut context_files)?;
+    collect_files(&context_path, &context_path, &mut context_files)?;
 
     // Write manifest
     let manifest = Manifest::new(&context_files);
@@ -53,13 +56,16 @@ pub fn export(output_path: &str) -> Result<()> {
     Ok(())
 }
 
-/// Import a .claw archive into the context directory
-pub fn import(claw_path: &str) -> Result<()> {
+/// Import a .claw archive into Spore's context directory.
+/// This is how a Spore receives context — from a parent at birth,
+/// from a partner during conjugation, or from a backup restore.
+pub fn import(home: &SporeHome, claw_path: &str) -> Result<()> {
+    let context_path = home.context_dir();
     let file = fs::File::open(claw_path)
         .with_context(|| format!("Failed to open {claw_path}"))?;
     let mut archive = zip::ZipArchive::new(file)?;
 
-    fs::create_dir_all(CONTEXT_DIR)?;
+    fs::create_dir_all(&context_path)?;
 
     for i in 0..archive.len() {
         let mut entry = archive.by_index(i)?;
@@ -70,7 +76,7 @@ pub fn import(claw_path: &str) -> Result<()> {
             if rel.is_empty() {
                 continue;
             }
-            let out_path = Path::new(CONTEXT_DIR).join(rel);
+            let out_path = context_path.join(rel);
             if let Some(parent) = out_path.parent() {
                 fs::create_dir_all(parent)?;
             }
@@ -83,7 +89,7 @@ pub fn import(claw_path: &str) -> Result<()> {
     Ok(())
 }
 
-/// Display info about a .claw archive
+/// Display info about a .claw archive without extracting it.
 pub fn info(claw_path: &str) -> Result<()> {
     let file = fs::File::open(claw_path)
         .with_context(|| format!("Failed to open {claw_path}"))?;
@@ -114,6 +120,9 @@ pub fn info(claw_path: &str) -> Result<()> {
 }
 
 fn collect_files(base: &Path, dir: &Path, out: &mut Vec<String>) -> Result<()> {
+    if !dir.exists() {
+        return Ok(());
+    }
     for entry in fs::read_dir(dir)? {
         let entry = entry?;
         let path = entry.path();
@@ -142,6 +151,10 @@ fn generate_readme() -> String {
         This file contains no secrets, no credentials, and no executable code.\n\
         It is purely declarative — it describes state, and the Spore runtime\n\
         decides what to do with it.\n\
+        \n\
+        .claw is the transport format — Spore zips up its context when it needs\n\
+        to share it (reproduction, conjugation, backup). Normally Spore works\n\
+        directly with the files in its ~/.spore/context/ directory.\n\
         \n\
         Learn more: https://github.com/EmmaLeonhart/OpenSpore\n",
     )

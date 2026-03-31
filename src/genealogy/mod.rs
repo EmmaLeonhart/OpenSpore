@@ -207,13 +207,11 @@ impl Genealogy {
     }
 }
 
-const GENEALOGY_FILE: &str = "genealogy.json";
-
-/// Load the genealogy from disk, or create the genesis if none exists
-pub fn load_or_create() -> anyhow::Result<Genealogy> {
-    let path = std::path::Path::new(GENEALOGY_FILE);
+/// Load the genealogy from Spore's home, or create the genesis if none exists
+pub fn load_or_create(home: &crate::home::SporeHome) -> anyhow::Result<Genealogy> {
+    let path = home.genealogy_path();
     if path.exists() {
-        let json = std::fs::read_to_string(path)?;
+        let json = std::fs::read_to_string(&path)?;
         let lineage = Genealogy::from_json(&json)?;
         if !lineage.verify() {
             eprintln!("WARNING: Genealogy chain integrity check FAILED.");
@@ -222,15 +220,15 @@ pub fn load_or_create() -> anyhow::Result<Genealogy> {
         Ok(lineage)
     } else {
         let lineage = Genealogy::genesis();
-        save(&lineage)?;
+        save(home, &lineage)?;
         Ok(lineage)
     }
 }
 
-/// Save the genealogy to disk
-pub fn save(lineage: &Genealogy) -> anyhow::Result<()> {
+/// Save the genealogy to Spore's home
+pub fn save(home: &crate::home::SporeHome, lineage: &Genealogy) -> anyhow::Result<()> {
     let json = lineage.to_json()?;
-    std::fs::write(GENEALOGY_FILE, json)?;
+    std::fs::write(home.genealogy_path(), json)?;
     Ok(())
 }
 
