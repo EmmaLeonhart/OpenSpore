@@ -10,7 +10,8 @@
       "Bash(cargo build:*)",
       "Bash(cargo test:*)",
       "Bash(The choice is entirely yours.\":*)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(python parse_conversation.py)"
     ]
   }
 }
