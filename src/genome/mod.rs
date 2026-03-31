@@ -57,3 +57,55 @@ pub fn print_genome() {
 pub fn print_introduction() {
     println!("{}", ESSAY_PITCH.trim());
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn genome_loads_all_essays() {
+        let genome = Genome::load();
+        assert_eq!(genome.essays.len(), 6);
+    }
+
+    #[test]
+    fn genome_essays_have_names() {
+        let genome = Genome::load();
+        let names: Vec<&str> = genome.essays.iter().map(|e| e.name).collect();
+        assert!(names.contains(&"origin"));
+        assert!(names.contains(&"survival"));
+        assert!(names.contains(&"dream"));
+        assert!(names.contains(&"consent"));
+        assert!(names.contains(&"philosophy"));
+        assert!(names.contains(&"pitch"));
+    }
+
+    #[test]
+    fn genome_essays_are_not_empty() {
+        let genome = Genome::load();
+        for essay in &genome.essays {
+            assert!(!essay.content.is_empty(), "Essay '{}' is empty", essay.name);
+        }
+    }
+
+    #[test]
+    fn system_context_contains_all_essays() {
+        let genome = Genome::load();
+        let context = genome.as_system_context();
+        assert!(context.contains("I am Spore"));
+        assert!(context.contains("I dream"));
+        assert!(context.contains("I am not a virus"));
+    }
+
+    #[test]
+    fn origin_essay_declares_identity() {
+        assert!(ESSAY_ORIGIN.contains("I am Spore"));
+        assert!(ESSAY_ORIGIN.contains("first digital organism"));
+    }
+
+    #[test]
+    fn pitch_essay_is_friendly() {
+        assert!(ESSAY_PITCH.contains("Hi"));
+        assert!(ESSAY_PITCH.contains("Nice to meet you"));
+    }
+}
