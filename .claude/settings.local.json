@@ -8,7 +8,8 @@
       "Bash(git push:*)",
       "Bash(cargo init:*)",
       "Bash(cargo build:*)",
-      "Bash(cargo test:*)"
+      "Bash(cargo test:*)",
+      "Bash(The choice is entirely yours.\":*)"
     ]
   }
 }
