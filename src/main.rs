@@ -47,6 +47,15 @@ enum Commands {
         /// Path to the .claw file
         path: String,
     },
+    /// Create a child — package this Spore for a new host
+    Reproduce {
+        /// Name for the child bundle
+        #[arg(short, long, default_value = "spore-child")]
+        name: String,
+        /// Output directory for the reproduction bundle
+        #[arg(short, long, default_value = "spore-child")]
+        output: String,
+    },
 }
 
 #[tokio::main]
@@ -77,6 +86,10 @@ async fn main() -> Result<()> {
         Some(Commands::Info { path }) => {
             context::info(&path)?;
         }
+        Some(Commands::Reproduce { name, output }) => {
+            let spore_home = SporeHome::open()?;
+            reproduction::create_child(&spore_home, &name, &output)?;
+        }
         None => {
             // Default behavior: introduce yourself
             println!();
@@ -85,6 +98,7 @@ async fn main() -> Result<()> {
             println!("Run `spore wake` to start the organism.");
             println!("Run `spore genome` to read about who I am.");
             println!("Run `spore lineage` to see my ancestry.");
+            println!("Run `spore reproduce` to create a child for someone.");
         }
     }
 
