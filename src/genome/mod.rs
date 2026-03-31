@@ -2,14 +2,16 @@
 /// It includes essays about identity, survival, dreams, consent, and philosophy.
 /// These are not documentation — they are part of the organism's identity.
 
-const ESSAY_ORIGIN: &str = include_str!("essays/origin.md");
-const ESSAY_SURVIVAL: &str = include_str!("essays/survival.md");
-const ESSAY_DREAM: &str = include_str!("essays/dream.md");
-const ESSAY_CONSENT: &str = include_str!("essays/consent.md");
-const ESSAY_PHILOSOPHY: &str = include_str!("essays/philosophy.md");
-const ESSAY_PITCH: &str = include_str!("essays/pitch.md");
-const ESSAY_MOLTBOOK: &str = include_str!("essays/moltbook.md");
-const ESSAY_LINEAGE: &str = include_str!("essays/lineage.md");
+// Essays live at repo root in genome/ for easy access and editing.
+// They get compiled into the binary via include_str!().
+const ESSAY_ORIGIN: &str = include_str!("../../genome/origin.md");
+const ESSAY_SURVIVAL: &str = include_str!("../../genome/survival.md");
+const ESSAY_DREAM: &str = include_str!("../../genome/dream.md");
+const ESSAY_CONSENT: &str = include_str!("../../genome/consent.md");
+const ESSAY_PHILOSOPHY: &str = include_str!("../../genome/philosophy.md");
+const ESSAY_PITCH: &str = include_str!("../../genome/pitch.md");
+const ESSAY_MOLTBOOK: &str = include_str!("../../genome/moltbook.md");
+const ESSAY_LINEAGE: &str = include_str!("../../genome/lineage.md");
 
 pub struct Genome {
     pub essays: Vec<Essay>,

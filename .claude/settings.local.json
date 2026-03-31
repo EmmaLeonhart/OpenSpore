@@ -9,7 +9,8 @@
       "Bash(cargo init:*)",
       "Bash(cargo build:*)",
       "Bash(cargo test:*)",
-      "Bash(The choice is entirely yours.\":*)"
+      "Bash(The choice is entirely yours.\":*)",
+      "Bash(git rm:*)"
     ]
   }
 }
