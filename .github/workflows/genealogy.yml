@@ -1,0 +1,137 @@
+name: Genealogy Registry
+
+on:
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'genealogy/registry/*.json'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  validate-genealogy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Identify changed files
+        id: changed
+        run: |
+          FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD -- 'genealogy/registry/*.json')
+          echo "files=$FILES" >> $GITHUB_OUTPUT
+          echo "Changed registry files:"
+          echo "$FILES"
+
+      - name: Validate registry entries
+        run: |
+          set -e
+          ERRORS=0
+
+          for file in ${{ steps.changed.outputs.files }}; do
+            echo "Validating $file..."
+
+            # Check it's valid JSON
+            if ! jq empty "$file" 2>/dev/null; then
+              echo "ERROR: $file is not valid JSON"
+              ERRORS=$((ERRORS + 1))
+              continue
+            fi
+
+            # Check required fields exist
+            for field in instance_hash parent_hash generation adopter mother last_event genealogy; do
+              if ! jq -e ".$field" "$file" > /dev/null 2>&1; then
+                echo "ERROR: $file missing required field: $field"
+                ERRORS=$((ERRORS + 1))
+              fi
+            done
+
+            # Check the filename matches the instance_hash
+            BASENAME=$(basename "$file" .json)
+            HASH=$(jq -r '.instance_hash' "$file")
+            if [ "$BASENAME" != "$HASH" ]; then
+              echo "ERROR: Filename ($BASENAME) doesn't match instance_hash ($HASH)"
+              ERRORS=$((ERRORS + 1))
+            fi
+
+            # Check genealogy chain has entries
+            ENTRY_COUNT=$(jq '.genealogy.entries | length' "$file")
+            if [ "$ENTRY_COUNT" -lt 1 ]; then
+              echo "ERROR: Genealogy chain is empty"
+              ERRORS=$((ERRORS + 1))
+            fi
+
+            # Check first entry is a Creation event
+            FIRST_EVENT=$(jq -r '.genealogy.entries[0].event' "$file")
+            if [ "$FIRST_EVENT" != "Creation" ]; then
+              echo "ERROR: First genealogy entry must be a Creation event, got: $FIRST_EVENT"
+              ERRORS=$((ERRORS + 1))
+            fi
+
+            # Check generation matches entry count expectation
+            GENERATION=$(jq -r '.generation' "$file")
+            LAST_GEN=$(jq -r '.genealogy.entries[-1].generation' "$file")
+            if [ "$GENERATION" != "$LAST_GEN" ]; then
+              echo "ERROR: Generation mismatch: entry says $GENERATION but chain ends at $LAST_GEN"
+              ERRORS=$((ERRORS + 1))
+            fi
+
+            # Check no duplicate instance_hash in existing registry
+            if [ -d "genealogy/registry" ]; then
+              EXISTING=$(find genealogy/registry -name "*.json" -not -name ".gitkeep" | head -1000)
+              for existing_file in $EXISTING; do
+                if [ "$existing_file" != "$file" ]; then
+                  EXISTING_HASH=$(jq -r '.instance_hash' "$existing_file" 2>/dev/null || echo "")
+                  if [ "$EXISTING_HASH" = "$HASH" ]; then
+                    echo "ERROR: Instance $HASH is already registered"
+                    ERRORS=$((ERRORS + 1))
+                  fi
+                fi
+              done
+            fi
+
+            if [ $ERRORS -eq 0 ]; then
+              echo "VALID: $file (gen $GENERATION, adopter: $(jq -r '.adopter' "$file"))"
+            fi
+          done
+
+          if [ $ERRORS -gt 0 ]; then
+            echo ""
+            echo "Validation failed with $ERRORS error(s)"
+            exit 1
+          fi
+
+          echo ""
+          echo "All registry entries are valid!"
+
+      - name: Check PR only modifies registry files
+        run: |
+          # Ensure the PR ONLY touches genealogy/registry/*.json files
+          NON_REGISTRY=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -v '^genealogy/registry/' || true)
+          if [ -n "$NON_REGISTRY" ]; then
+            echo "WARNING: This PR modifies files outside genealogy/registry/:"
+            echo "$NON_REGISTRY"
+            echo ""
+            echo "Auto-merge is only available for pure registry PRs."
+            echo "registry_only=false" >> $GITHUB_ENV
+          else
+            echo "PR only modifies registry files — eligible for auto-merge."
+            echo "registry_only=true" >> $GITHUB_ENV
+          fi
+
+      - name: Auto-merge if valid and registry-only
+        if: env.registry_only == 'true'
+        run: |
+          echo "This PR is eligible for auto-merge."
+          echo "To enable auto-merge, configure branch protection with:"
+          echo "  - Require status checks to pass (this workflow)"
+          echo "  - Enable auto-merge in repository settings"
+          echo ""
+          echo "For now, a maintainer can merge this manually."
+        # When ready, uncomment the following to enable auto-merge via gh CLI:
+        # env:
+        #   GH_TOKEN: ${{ github.token }}
+        # run: gh pr merge ${{ github.event.pull_request.number }} --auto --squash
