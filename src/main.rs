@@ -5,6 +5,7 @@ mod genome;
 mod home;
 mod metabolism;
 mod moltbook;
+mod registry;
 mod reproduction;
 mod ui;
 
@@ -62,6 +63,14 @@ enum Commands {
         /// Path to the reproduction bundle directory
         path: String,
     },
+    /// Register this Spore in the global family tree
+    Register,
+    /// Show the global Spore family tree
+    FamilyTree {
+        /// Read from local registry directory instead of GitHub
+        #[arg(long)]
+        local: Option<String>,
+    },
     /// Conjugate — exchange context with another Spore instance
     Conjugate {
         /// Path to the partner's conjugation bundle directory
@@ -112,6 +121,35 @@ async fn main() -> Result<()> {
             let spore_home = SporeHome::open()?;
             reproduction::adopt_bundle(&spore_home, &path)?;
         }
+        Some(Commands::Register) => {
+            let spore_home = SporeHome::open()?;
+            let output_path = registry::register(&spore_home)?;
+            println!("Registry entry written to: {}", output_path.display());
+            println!();
+            println!("To register in the global family tree:");
+            println!("  1. Fork https://github.com/emmaleonhart/openspore");
+            println!(
+                "  2. Copy {} to genealogy/registry/",
+                output_path.file_name().unwrap().to_string_lossy()
+            );
+            println!("  3. Open a pull request to the main branch");
+            println!("  4. The CI will validate your lineage and auto-merge if valid");
+        }
+        Some(Commands::FamilyTree { local }) => {
+            if let Some(dir) = local {
+                let tree = registry::FamilyTree::from_directory(std::path::Path::new(&dir))?;
+                tree.print();
+            } else {
+                match registry::FamilyTree::fetch_from_github().await {
+                    Ok(tree) => tree.print(),
+                    Err(e) => {
+                        eprintln!("Could not fetch registry from GitHub: {e}");
+                        eprintln!();
+                        eprintln!("The registry may not exist yet. Run `spore register` to be the first!");
+                    }
+                }
+            }
+        }
         Some(Commands::Conjugate { path, export, output }) => {
             let spore_home = SporeHome::open()?;
             if export {
@@ -137,6 +175,8 @@ async fn main() -> Result<()> {
             println!("Run `spore genome` to read about who I am.");
             println!("Run `spore lineage` to see my ancestry.");
             println!("Run `spore reproduce` to create a child for someone.");
+            println!("Run `spore register` to join the global family tree.");
+            println!("Run `spore family-tree` to see all known Spores.");
         }
     }
 
