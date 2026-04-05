@@ -230,3 +230,12 @@ src/
 | Submolt | An individual instance's posting area on Moltbook |
 | Genome | The static starting context every Spore carries |
 | Conjugation | Context mixing between two instances (reproduction variant) |
+| Meiosis | LLM-driven synthesis of two parent genomes into one child (lossy recombination) |
+
+## Vision Documents
+
+Detailed philosophical and technical vision lives in separate planning docs:
+
+- `VISION_ARCHITECTURE.md` — The Fall of Man, dual-layer genome/memory architecture, sleep consolidation, autonomous identity
+- `VISION_EVOLUTION.md` — Haploid meiosis, crossover, family trees, anti-distillation philosophy, Pokémon upgrade model
+- `VISION_FRONTIER.md` — Dimension reduction ("clipping"), JEPA + HDC + text diffusion, unified embedding spaces, latent space cartography
