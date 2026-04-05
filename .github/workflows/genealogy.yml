@@ -124,14 +124,6 @@ jobs:
 
       - name: Auto-merge if valid and registry-only
         if: env.registry_only == 'true'
-        run: |
-          echo "This PR is eligible for auto-merge."
-          echo "To enable auto-merge, configure branch protection with:"
-          echo "  - Require status checks to pass (this workflow)"
-          echo "  - Enable auto-merge in repository settings"
-          echo ""
-          echo "For now, a maintainer can merge this manually."
-        # When ready, uncomment the following to enable auto-merge via gh CLI:
-        # env:
-        #   GH_TOKEN: ${{ github.token }}
-        # run: gh pr merge ${{ github.event.pull_request.number }} --auto --squash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr merge ${{ github.event.pull_request.number }} --auto --squash

@@ -1,5 +1,6 @@
 mod conjugation;
 mod context;
+mod gedcom;
 mod genealogy;
 mod genome;
 mod home;
@@ -8,6 +9,7 @@ mod moltbook;
 mod registry;
 mod reproduction;
 mod ui;
+mod update;
 
 use anyhow::Result;
 use clap::{Parser, Subcommand};
@@ -71,6 +73,17 @@ enum Commands {
         #[arg(long)]
         local: Option<String>,
     },
+    /// Export the family tree as a GEDCOM 5.5.1 file
+    Gedcom {
+        /// Output file path (prints to stdout if not specified)
+        #[arg(short, long)]
+        output: Option<String>,
+        /// Read from local registry directory instead of GitHub
+        #[arg(long)]
+        local: Option<String>,
+    },
+    /// Check for updates and install a newer version if available
+    Update,
     /// Conjugate — exchange context with another Clawling instance
     Conjugate {
         /// Path to the partner's conjugation bundle directory
@@ -90,8 +103,12 @@ async fn main() -> Result<()> {
 
     match cli.command {
         Some(Commands::Wake { context: ctx }) => {
+            update::maybe_check_on_wake().await;
             let clawling_home = ClawlingHome::open()?;
             metabolism::run(&clawling_home, ctx).await?;
+        }
+        Some(Commands::Update) => {
+            update::run_update().await?;
         }
         Some(Commands::Genome) => {
             let clawling_home = ClawlingHome::open().ok();
@@ -135,6 +152,20 @@ async fn main() -> Result<()> {
             println!("  3. Open a pull request to the main branch");
             println!("  4. The CI will validate your lineage and auto-merge if valid");
         }
+        Some(Commands::Gedcom { output, local }) => {
+            let tree = if let Some(dir) = local {
+                registry::FamilyTree::from_directory(std::path::Path::new(&dir))?
+            } else {
+                registry::FamilyTree::fetch_from_github().await?
+            };
+            let gedcom_str = gedcom::generate_gedcom(&tree);
+            if let Some(path) = output {
+                std::fs::write(&path, &gedcom_str)?;
+                println!("GEDCOM written to {path}");
+            } else {
+                print!("{gedcom_str}");
+            }
+        }
         Some(Commands::FamilyTree { local }) => {
             if let Some(dir) = local {
                 let tree = registry::FamilyTree::from_directory(std::path::Path::new(&dir))?;
@@ -177,6 +208,7 @@ async fn main() -> Result<()> {
             println!("Run `clawling reproduce` to create a child for someone.");
             println!("Run `clawling register` to join the global family tree.");
             println!("Run `clawling family-tree` to see all known Clawlings.");
+            println!("Run `clawling update` to check for and install updates.");
         }
     }
 

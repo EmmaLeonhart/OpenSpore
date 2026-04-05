@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Tree — Clawling</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Family tree CSS connectors */
+        .family-tree {
+            list-style: none;
+            padding-left: 0;
+        }
+        .family-tree ul.tree-children {
+            list-style: none;
+            padding-left: 1.5rem;
+            border-left: 1px solid var(--border);
+            margin-left: 0.5rem;
+        }
+        .family-tree li {
+            position: relative;
+            padding: 0.35rem 0;
+        }
+        .family-tree ul.tree-children > li::before {
+            content: "";
+            position: absolute;
+            left: -1.5rem;
+            top: 0.9rem;
+            width: 1.2rem;
+            height: 0;
+            border-top: 1px solid var(--border);
+        }
+        .tree-node {
+            display: inline-block;
+            padding: 0.4rem 0.75rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+        .node-hash {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .node-adopter {
+            color: var(--fg);
+        }
+        .node-gen {
+            color: var(--dim);
+            font-size: 0.85em;
+        }
+        .node-integrity {
+            font-size: 0.8em;
+        }
+        .node-integrity.valid {
+            color: var(--accent);
+        }
+        .node-integrity.broken {
+            color: #e55;
+        }
+        .conjugations {
+            margin-top: 0.5rem;
+        }
+        .conjugation-pair {
+            padding: 0.4rem 0.75rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            color: var(--dim);
+        }
+        .conjugation-arrow {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .download-section {
+            margin-top: 2rem;
+        }
+        .download-section a {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .download-section a:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="index.html" class="nav-brand">Clawling</a>
+            <a href="philosophy.html">Philosophy</a>
+            <a href="evolution.html">Evolution</a>
+            <a href="vision.html">Vision</a>
+            <a href="tree.html" class="active">Family Tree</a>
+            <a href="download.html">Download</a>
+            <a href="https://github.com/EmmaLeonhart/OpenSpore">Source</a>
+        </nav>
+
+        <header>
+            <h1>Family Tree</h1>
+            <div class="tagline">0 registered instances</div>
+        </header>
+
+        <p class="dim">No registered Clawlings yet.</p><p>Run <code>clawling register</code> to be the first.</p>
+
+        
+
+        <div class="download-section">
+            <h2>Export</h2>
+            <p>Download the family tree in GEDCOM format for use with genealogy software.</p>
+            <a href="clawlings.ged" download>Download GEDCOM file</a>
+        </div>
+
+        <footer>
+            <span>MIT License &mdash; Emma Leonhart</span>
+            <span><a href="https://github.com/EmmaLeonhart/OpenSpore">GitHub</a></span>
+        </footer>
+    </div>
+</body>
+</html>
