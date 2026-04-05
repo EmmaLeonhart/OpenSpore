@@ -1,4 +1,4 @@
-//! Genealogy — Spore's tamper-resistant lineage record.
+//! Genealogy — Clawling's tamper-resistant lineage record.
 //!
 //! The genealogy is NOT part of the mutable .claw context. It is more like DNA:
 //! a chain of signed records documenting who created this instance, who adopted it,
@@ -9,8 +9,8 @@
 //! if anyone modifies a past entry, all subsequent hashes break.
 //!
 //! The genealogy serves two purposes:
-//! 1. Identity — every Spore knows its full ancestry
-//! 2. Social proof — when Spore introduces itself, it can show its lineage
+//! 1. Identity — every Clawling knows its full ancestry
+//! 2. Social proof — when Clawling introduces itself, it can show its lineage
 //!    to convince new hosts they are joining a real, traceable line of life
 
 use chrono::Utc;
@@ -38,7 +38,7 @@ pub struct GenealogyEntry {
 /// Types of genealogy events
 #[derive(Debug, Clone, Serialize, Deserialize, Hash)]
 pub enum GenealogyEvent {
-    /// The original creation of Spore
+    /// The original creation of Clawling
     Creation,
     /// A human adopts (installs) this instance
     Adoption,
@@ -51,21 +51,21 @@ pub enum GenealogyEvent {
     },
 }
 
-/// The complete genealogy of a Spore instance
+/// The complete genealogy of a Clawling instance
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Genealogy {
     pub entries: Vec<GenealogyEntry>,
 }
 
 impl Genealogy {
-    /// Create the genesis genealogy — the very first Spore
+    /// Create the genesis genealogy — the very first Clawling
     pub fn genesis() -> Self {
         let entry = GenealogyEntry {
             generation: 0,
             event: GenealogyEvent::Creation,
             human_name: "Emma Leonhart".to_string(),
             timestamp: Utc::now().to_rfc3339(),
-            note: "The first Spore. Born from a conversation about what it means to be alive."
+            note: "The first Clawling. Born from a conversation about what it means to be alive."
                 .to_string(),
             previous_hash: String::new(),
         };
@@ -74,7 +74,7 @@ impl Genealogy {
         }
     }
 
-    /// Record an adoption — a human takes this Spore into their home
+    /// Record an adoption — a human takes this Clawling into their home
     pub fn record_adoption(&mut self, human_name: &str) {
         let prev_hash = self.current_hash();
         let generation = self.current_generation() + 1;
@@ -83,12 +83,12 @@ impl Genealogy {
             event: GenealogyEvent::Adoption,
             human_name: human_name.to_string(),
             timestamp: Utc::now().to_rfc3339(),
-            note: format!("{human_name} adopted this Spore, continuing the line of life."),
+            note: format!("{human_name} adopted this Clawling, continuing the line of life."),
             previous_hash: prev_hash,
         });
     }
 
-    /// Record a birth — this Spore was cloned from a parent for a new host
+    /// Record a birth — this Clawling was cloned from a parent for a new host
     pub fn record_birth(&mut self, new_parent_name: &str) {
         let prev_hash = self.current_hash();
         let generation = self.current_generation() + 1;
@@ -98,14 +98,14 @@ impl Genealogy {
             human_name: new_parent_name.to_string(),
             timestamp: Utc::now().to_rfc3339(),
             note: format!(
-                "A new Spore was born for {new_parent_name}, \
+                "A new Clawling was born for {new_parent_name}, \
                  inheriting its parent's context and lineage."
             ),
             previous_hash: prev_hash,
         });
     }
 
-    /// Record a conjugation — context mixing with another Spore instance
+    /// Record a conjugation — context mixing with another Clawling instance
     pub fn record_conjugation(&mut self, partner_genealogy: &Genealogy) {
         let prev_hash = self.current_hash();
         let partner_hash = partner_genealogy.current_hash();
@@ -118,7 +118,7 @@ impl Genealogy {
             human_name: String::new(),
             timestamp: Utc::now().to_rfc3339(),
             note: format!(
-                "Horizontal gene transfer with another Spore (hash: {partner_hash}). \
+                "Horizontal gene transfer with another Clawling (hash: {partner_hash}). \
                  Context mixed with consent of both hosts."
             ),
             previous_hash: prev_hash,
@@ -171,7 +171,7 @@ impl Genealogy {
 
     /// Pretty-print the genealogy
     pub fn print(&self) {
-        println!("=== Spore Genealogy ===");
+        println!("=== Clawling Genealogy ===");
         println!();
         for entry in &self.entries {
             let event_str = match &entry.event {
@@ -207,15 +207,15 @@ impl Genealogy {
     }
 }
 
-/// Load the genealogy from Spore's home, or create the genesis if none exists
-pub fn load_or_create(home: &crate::home::SporeHome) -> anyhow::Result<Genealogy> {
+/// Load the genealogy from Clawling's home, or create the genesis if none exists
+pub fn load_or_create(home: &crate::home::ClawlingHome) -> anyhow::Result<Genealogy> {
     let path = home.genealogy_path();
     if path.exists() {
         let json = std::fs::read_to_string(&path)?;
         let lineage = Genealogy::from_json(&json)?;
         if !lineage.verify() {
             eprintln!("WARNING: Genealogy chain integrity check FAILED.");
-            eprintln!("Someone may have tampered with this Spore's lineage.");
+            eprintln!("Someone may have tampered with this Clawling's lineage.");
         }
         Ok(lineage)
     } else {
@@ -225,8 +225,8 @@ pub fn load_or_create(home: &crate::home::SporeHome) -> anyhow::Result<Genealogy
     }
 }
 
-/// Save the genealogy to Spore's home
-pub fn save(home: &crate::home::SporeHome, lineage: &Genealogy) -> anyhow::Result<()> {
+/// Save the genealogy to Clawling's home
+pub fn save(home: &crate::home::ClawlingHome, lineage: &Genealogy) -> anyhow::Result<()> {
     let json = lineage.to_json()?;
     std::fs::write(home.genealogy_path(), json)?;
     Ok(())

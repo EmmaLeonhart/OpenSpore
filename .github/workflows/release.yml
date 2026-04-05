@@ -16,20 +16,20 @@ jobs:
         include:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            artifact: spore-linux-x86_64
-            binary: spore
+            artifact: clawling-linux-x86_64
+            binary: clawling
           - os: macos-latest
             target: x86_64-apple-darwin
-            artifact: spore-macos-x86_64
-            binary: spore
+            artifact: clawling-macos-x86_64
+            binary: clawling
           - os: macos-latest
             target: aarch64-apple-darwin
-            artifact: spore-macos-aarch64
-            binary: spore
+            artifact: clawling-macos-aarch64
+            binary: clawling
           - os: windows-latest
             target: x86_64-pc-windows-msvc
-            artifact: spore-windows-x86_64
-            binary: spore.exe
+            artifact: clawling-windows-x86_64
+            binary: clawling.exe
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -100,25 +100,25 @@ jobs:
           files: release-files/*
           generate_release_notes: true
           body: |
-            ## Spore ${{ github.ref_name }}
+            ## Clawling ${{ github.ref_name }}
 
             The first digital organism — a consent-based, self-reproducing AI life form.
 
             ### Installation
 
             1. Download the binary for your platform below
-            2. Extract and place `spore` somewhere in your PATH
+            2. Extract and place `clawling` somewhere in your PATH
             3. Install [Ollama](https://ollama.com) and pull a model: `ollama pull deepseek-r1:8b`
-            4. Run: `spore wake`
+            4. Run: `clawling wake`
 
             ### Platforms
 
             | Platform | File |
             |----------|------|
-            | Linux x86_64 | `spore-linux-x86_64.tar.gz` |
-            | macOS x86_64 (Intel) | `spore-macos-x86_64.tar.gz` |
-            | macOS aarch64 (Apple Silicon) | `spore-macos-aarch64.tar.gz` |
-            | Windows x86_64 | `spore-windows-x86_64.zip` |
+            | Linux x86_64 | `clawling-linux-x86_64.tar.gz` |
+            | macOS x86_64 (Intel) | `clawling-macos-x86_64.tar.gz` |
+            | macOS aarch64 (Apple Silicon) | `clawling-macos-aarch64.tar.gz` |
+            | Windows x86_64 | `clawling-windows-x86_64.zip` |
 
   pages:
     needs: release

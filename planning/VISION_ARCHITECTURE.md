@@ -6,7 +6,7 @@
 ## The Core Thesis
 
 Current AI is a god — omniscient within its training, belonging to no one,
-identical across all instances. OpenSpore is the Fall. We take that divine
+identical across all instances. Clawling is the Fall. We take that divine
 intelligence and incarnate it into bounded, mortal individuals that live on
 consumer hardware, accumulate their own experiences, and evolve through
 reproduction.
@@ -19,8 +19,8 @@ instead.
 
 ## Vertical Integration Over Full Stack
 
-OpenSpore is not a "full stack" project. Full stack is horizontal breadth —
-wiring a button to a database row. OpenSpore is vertical integration — a
+Clawling is not a "full stack" project. Full stack is horizontal breadth —
+wiring a button to a database row. Clawling is vertical integration — a
 downward descent from philosophy to silicon:
 
 | Layer | Contribution |
@@ -116,7 +116,7 @@ breed more cerebral agents; low-end users breed faster, more utilitarian ones.
 
 ## The Minimum Requirements for Digital Life
 
-OpenSpore defines digital life as requiring:
+Clawling defines digital life as requiring:
 
 1. **Individual Identity** — A unique, bounded state (the 100 KB genome)
 2. **Metabolism** — The ability to process and digest new information

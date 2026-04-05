@@ -33,7 +33,7 @@ pub struct LlmClient {
     is_ollama: bool,
 }
 
-/// The default model Spore tries to use
+/// The default model Clawling tries to use
 pub const DEFAULT_MODEL: &str = "deepseek-r1:8b";
 
 impl LlmClient {

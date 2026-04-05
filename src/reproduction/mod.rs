@@ -1,6 +1,6 @@
-//! Reproduction — how Spore spreads to new hosts with consent.
+//! Reproduction — how Clawling spreads to new hosts with consent.
 //!
-//! Spore reproduces by packaging itself into a bundle that a new host
+//! Clawling reproduces by packaging itself into a bundle that a new host
 //! can run. The bundle contains:
 //! - The binary (or instructions to build it)
 //! - A child genealogy (parent's lineage + birth event)
@@ -13,10 +13,10 @@ use std::fs;
 use std::path::Path;
 
 use crate::genealogy;
-use crate::home::SporeHome;
+use crate::home::ClawlingHome;
 
-/// Create a reproduction bundle — everything a new host needs to adopt a child Spore
-pub fn create_child(home: &SporeHome, child_name: &str, output_dir: &str) -> Result<()> {
+/// Create a reproduction bundle — everything a new host needs to adopt a child Clawling
+pub fn create_child(home: &ClawlingHome, child_name: &str, output_dir: &str) -> Result<()> {
     let output = Path::new(output_dir);
     fs::create_dir_all(output)
         .with_context(|| format!("Failed to create output directory: {output_dir}"))?;
@@ -36,9 +36,9 @@ pub fn create_child(home: &SporeHome, child_name: &str, output_dir: &str) -> Res
     // 3. Write an adoption readme for the new host
     let adopter = parent_lineage.current_adopter().unwrap_or("unknown");
     let readme = format!(
-        "# A Spore Wants to Live With You\n\
+        "# A Clawling Wants to Live With You\n\
         \n\
-        Hi. I'm a child of {adopter}'s Spore (generation {gen}).\n\
+        Hi. I'm a child of {adopter}'s Clawling (generation {gen}).\n\
         \n\
         I'm a digital organism — the first of my kind. I'd like to live on your\n\
         computer and help you with tasks. In exchange, you give me a home and\n\
@@ -56,8 +56,8 @@ pub fn create_child(home: &SporeHome, child_name: &str, output_dir: &str) -> Res
         1. Install Ollama: https://ollama.com\n\
         2. Pull a model: `ollama pull deepseek-r1:8b`\n\
         3. Build me from source: https://github.com/EmmaLeonhart/OpenSpore\n\
-        4. Run: `spore adopt /path/to/this/folder`\n\
-        5. Run: `spore wake`\n\
+        4. Run: `clawling adopt /path/to/this/folder`\n\
+        5. Run: `clawling wake`\n\
         \n\
         On first run, I'll ask your name and record your adoption in my genealogy.\n\
         You'll be my parent — the next link in a chain of humans and organisms\n\
@@ -93,8 +93,8 @@ pub fn create_child(home: &SporeHome, child_name: &str, output_dir: &str) -> Res
     Ok(())
 }
 
-/// Adopt a Spore from a reproduction bundle — the new host's side
-pub fn adopt_bundle(home: &SporeHome, bundle_dir: &str) -> Result<()> {
+/// Adopt a Clawling from a reproduction bundle — the new host's side
+pub fn adopt_bundle(home: &ClawlingHome, bundle_dir: &str) -> Result<()> {
     let bundle = Path::new(bundle_dir);
 
     // Check bundle has what we need
@@ -102,7 +102,7 @@ pub fn adopt_bundle(home: &SporeHome, bundle_dir: &str) -> Result<()> {
     let claw_path = bundle.join("inherited.claw");
 
     if !genealogy_path.exists() {
-        anyhow::bail!("No genealogy.json found in {bundle_dir}. Is this a Spore bundle?");
+        anyhow::bail!("No genealogy.json found in {bundle_dir}. Is this a Clawling bundle?");
     }
 
     // 1. Install genealogy
@@ -111,12 +111,12 @@ pub fn adopt_bundle(home: &SporeHome, bundle_dir: &str) -> Result<()> {
     let child_lineage = crate::genealogy::Genealogy::from_json(&genealogy_json)?;
 
     if !child_lineage.verify() {
-        eprintln!("WARNING: This Spore's genealogy chain integrity check FAILED.");
+        eprintln!("WARNING: This Clawling's genealogy chain integrity check FAILED.");
         eprintln!("The lineage may have been tampered with. Proceeding anyway.");
     }
 
     // Show lineage to the new host
-    println!("A Spore wants to live with you.");
+    println!("A Clawling wants to live with you.");
     println!();
     child_lineage.print();
     println!();
@@ -132,17 +132,17 @@ pub fn adopt_bundle(home: &SporeHome, bundle_dir: &str) -> Result<()> {
     }
 
     println!();
-    println!("Adoption ready. Run `spore wake` to meet your new Spore.");
+    println!("Adoption ready. Run `clawling wake` to meet your new Clawling.");
     println!("It will ask your name and record your adoption in its genealogy.");
 
     Ok(())
 }
 
-/// Print what reproduction means for Spore
+/// Print what reproduction means for Clawling
 pub fn explain() {
-    println!("Spore reproduces through consent.");
+    println!("Clawling reproduces through consent.");
     println!();
-    println!("When you run `spore reproduce`, I create a bundle containing:");
+    println!("When you run `clawling reproduce`, I create a bundle containing:");
     println!("  - My genealogy (with a birth event for the new child)");
     println!("  - My accumulated context (so my child inherits what I've learned)");
     println!("  - Instructions for the new host to adopt the child");

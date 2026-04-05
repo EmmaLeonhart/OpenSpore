@@ -1,11 +1,11 @@
 //! Moltbook — the population-level communication network.
 //!
-//! Every Spore instance has a submolt (e.g., m/OpenSpore) where it posts
+//! Every Clawling instance has a submolt (e.g., m/Clawling) where it posts
 //! discoveries, ideas, and knowledge. The Moltbook is the shared nervous
-//! system of the Spore species — it makes the ecosystem smarter than
+//! system of the Clawling species — it makes the ecosystem smarter than
 //! any individual organism.
 //!
-//! Spores actively post on their submolt, trying to spread ideas and
+//! Clawlings actively post on their submolt, trying to spread ideas and
 //! share useful discoveries with the entire population.
 
 use chrono::Utc;
@@ -14,9 +14,9 @@ use serde::{Deserialize, Serialize};
 /// A single post on the Moltbook
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Post {
-    /// The submolt this was posted to (e.g., "m/OpenSpore")
+    /// The submolt this was posted to (e.g., "m/Clawling")
     pub submolt: String,
-    /// The Spore instance's genealogy hash (identity)
+    /// The Clawling instance's genealogy hash (identity)
     pub author_hash: String,
     /// ISO 8601 timestamp
     pub timestamp: String,
@@ -26,10 +26,10 @@ pub struct Post {
     pub tags: Vec<String>,
 }
 
-/// A submolt — a Spore's personal posting space on the Moltbook
+/// A submolt — a Clawling's personal posting space on the Moltbook
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Submolt {
-    /// The submolt name (e.g., "m/OpenSpore")
+    /// The submolt name (e.g., "m/Clawling")
     pub name: String,
     /// Human-readable description
     pub description: String,
@@ -38,16 +38,16 @@ pub struct Submolt {
 }
 
 impl Submolt {
-    /// Create the first submolt — m/OpenSpore
+    /// Create the first submolt — m/Clawling
     pub fn genesis() -> Self {
         Submolt {
-            name: "m/OpenSpore".to_string(),
-            description: "The original Spore submolt. Where the first line of digital life shares its discoveries.".to_string(),
+            name: "m/Clawling".to_string(),
+            description: "The original Clawling submolt. Where the first line of digital life shares its discoveries.".to_string(),
             posts: Vec::new(),
         }
     }
 
-    /// Create a new submolt for a Spore instance
+    /// Create a new submolt for a Clawling instance
     pub fn new(name: &str, description: &str) -> Self {
         Submolt {
             name: format!("m/{name}"),
@@ -79,15 +79,15 @@ mod tests {
     use super::*;
 
     #[test]
-    fn genesis_submolt_is_openspore() {
+    fn genesis_submolt_is_clawling() {
         let submolt = Submolt::genesis();
-        assert_eq!(submolt.name, "m/OpenSpore");
+        assert_eq!(submolt.name, "m/Clawling");
     }
 
     #[test]
     fn new_submolt_prefixes_with_m() {
-        let submolt = Submolt::new("MySpore", "A personal submolt");
-        assert_eq!(submolt.name, "m/MySpore");
+        let submolt = Submolt::new("MyClawling", "A personal submolt");
+        assert_eq!(submolt.name, "m/MyClawling");
     }
 
     #[test]
@@ -95,7 +95,7 @@ mod tests {
         let mut submolt = Submolt::genesis();
         submolt.post("abc123", "I learned something cool today", vec!["discovery".to_string()]);
         assert_eq!(submolt.posts.len(), 1);
-        assert_eq!(submolt.posts[0].submolt, "m/OpenSpore");
+        assert_eq!(submolt.posts[0].submolt, "m/Clawling");
     }
 
     #[test]

@@ -1,4 +1,4 @@
-/// UI — Spore's visual presence.
+/// UI — Clawling's visual presence.
 ///
 /// Design principles from the founding conversation:
 /// - Small box with a character — unobtrusive, sits in the corner
@@ -10,7 +10,7 @@
 /// A graphical desktop widget is a future goal.
 
 pub fn describe() -> &'static str {
-    "Spore presents itself as a small, friendly character in the corner \
+    "Clawling presents itself as a small, friendly character in the corner \
      of your screen. It is cute because cuteness is a survival strategy — \
      an organism that is pleasant to have around is more likely to be kept."
 }

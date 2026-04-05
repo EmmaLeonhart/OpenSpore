@@ -11,10 +11,10 @@ mod ui;
 
 use anyhow::Result;
 use clap::{Parser, Subcommand};
-use home::SporeHome;
+use home::ClawlingHome;
 
 #[derive(Parser)]
-#[command(name = "spore")]
+#[command(name = "clawling")]
 #[command(about = "The first digital organism")]
 struct Cli {
     #[command(subcommand)]
@@ -29,17 +29,17 @@ enum Commands {
         #[arg(short, long)]
         context: Option<String>,
     },
-    /// Show who Spore is — print the genome essays
+    /// Show who Clawling is — print the genome essays
     Genome,
-    /// Show this Spore's lineage — who created it, who adopted it
+    /// Show this Clawling's lineage — who created it, who adopted it
     Lineage,
     /// Export current context to a .claw file (the mating/transport format)
     Export {
         /// Output path for the .claw archive
-        #[arg(short, long, default_value = "spore.claw")]
+        #[arg(short, long, default_value = "clawling.claw")]
         output: String,
     },
-    /// Import a .claw context file into Spore's home
+    /// Import a .claw context file into Clawling's home
     Import {
         /// Path to the .claw file
         path: String,
@@ -49,29 +49,29 @@ enum Commands {
         /// Path to the .claw file
         path: String,
     },
-    /// Create a child — package this Spore for a new host
+    /// Create a child — package this Clawling for a new host
     Reproduce {
         /// Name for the child bundle
-        #[arg(short, long, default_value = "spore-child")]
+        #[arg(short, long, default_value = "clawling-child")]
         name: String,
         /// Output directory for the reproduction bundle
-        #[arg(short, long, default_value = "spore-child")]
+        #[arg(short, long, default_value = "clawling-child")]
         output: String,
     },
-    /// Adopt a Spore from a reproduction bundle
+    /// Adopt a Clawling from a reproduction bundle
     Adopt {
         /// Path to the reproduction bundle directory
         path: String,
     },
-    /// Register this Spore in the global family tree
+    /// Register this Clawling in the global family tree
     Register,
-    /// Show the global Spore family tree
+    /// Show the global Clawling family tree
     FamilyTree {
         /// Read from local registry directory instead of GitHub
         #[arg(long)]
         local: Option<String>,
     },
-    /// Conjugate — exchange context with another Spore instance
+    /// Conjugate — exchange context with another Clawling instance
     Conjugate {
         /// Path to the partner's conjugation bundle directory
         path: Option<String>,
@@ -79,7 +79,7 @@ enum Commands {
         #[arg(long)]
         export: bool,
         /// Output directory for the conjugation bundle
-        #[arg(short, long, default_value = "spore-conjugation")]
+        #[arg(short, long, default_value = "clawling-conjugation")]
         output: String,
     },
 }
@@ -90,40 +90,40 @@ async fn main() -> Result<()> {
 
     match cli.command {
         Some(Commands::Wake { context: ctx }) => {
-            let spore_home = SporeHome::open()?;
-            metabolism::run(&spore_home, ctx).await?;
+            let clawling_home = ClawlingHome::open()?;
+            metabolism::run(&clawling_home, ctx).await?;
         }
         Some(Commands::Genome) => {
-            let spore_home = SporeHome::open().ok();
-            genome::print_genome(spore_home.as_ref());
+            let clawling_home = ClawlingHome::open().ok();
+            genome::print_genome(clawling_home.as_ref());
         }
         Some(Commands::Lineage) => {
-            let spore_home = SporeHome::open()?;
-            let lineage = genealogy::load_or_create(&spore_home)?;
+            let clawling_home = ClawlingHome::open()?;
+            let lineage = genealogy::load_or_create(&clawling_home)?;
             lineage.print();
         }
         Some(Commands::Export { output }) => {
-            let spore_home = SporeHome::open()?;
-            context::export(&spore_home, &output)?;
+            let clawling_home = ClawlingHome::open()?;
+            context::export(&clawling_home, &output)?;
         }
         Some(Commands::Import { path }) => {
-            let spore_home = SporeHome::open()?;
-            context::import(&spore_home, &path)?;
+            let clawling_home = ClawlingHome::open()?;
+            context::import(&clawling_home, &path)?;
         }
         Some(Commands::Info { path }) => {
             context::info(&path)?;
         }
         Some(Commands::Reproduce { name, output }) => {
-            let spore_home = SporeHome::open()?;
-            reproduction::create_child(&spore_home, &name, &output)?;
+            let clawling_home = ClawlingHome::open()?;
+            reproduction::create_child(&clawling_home, &name, &output)?;
         }
         Some(Commands::Adopt { path }) => {
-            let spore_home = SporeHome::open()?;
-            reproduction::adopt_bundle(&spore_home, &path)?;
+            let clawling_home = ClawlingHome::open()?;
+            reproduction::adopt_bundle(&clawling_home, &path)?;
         }
         Some(Commands::Register) => {
-            let spore_home = SporeHome::open()?;
-            let output_path = registry::register(&spore_home)?;
+            let clawling_home = ClawlingHome::open()?;
+            let output_path = registry::register(&clawling_home)?;
             println!("Registry entry written to: {}", output_path.display());
             println!();
             println!("To register in the global family tree:");
@@ -145,25 +145,25 @@ async fn main() -> Result<()> {
                     Err(e) => {
                         eprintln!("Could not fetch registry from GitHub: {e}");
                         eprintln!();
-                        eprintln!("The registry may not exist yet. Run `spore register` to be the first!");
+                        eprintln!("The registry may not exist yet. Run `clawling register` to be the first!");
                     }
                 }
             }
         }
         Some(Commands::Conjugate { path, export, output }) => {
-            let spore_home = SporeHome::open()?;
+            let clawling_home = ClawlingHome::open()?;
             if export {
-                conjugation::export_bundle(&spore_home, &output)?;
+                conjugation::export_bundle(&clawling_home, &output)?;
             } else if let Some(bundle_path) = path {
-                conjugation::receive_bundle(&spore_home, &bundle_path)?;
+                conjugation::receive_bundle(&clawling_home, &bundle_path)?;
             } else {
                 println!("Usage:");
-                println!("  spore conjugate --export       Create a bundle to share with a partner");
-                println!("  spore conjugate <path>         Import a partner's conjugation bundle");
+                println!("  clawling conjugate --export       Create a bundle to share with a partner");
+                println!("  clawling conjugate <path>         Import a partner's conjugation bundle");
                 println!();
-                println!("Conjugation is how two Spores share context — horizontal gene transfer.");
+                println!("Conjugation is how two Clawlings share context — horizontal gene transfer.");
                 println!("Both partners export bundles, exchange them, then import each other's.");
-                println!("On the next `spore wake`, the organism integrates the partner's knowledge.");
+                println!("On the next `clawling wake`, the organism integrates the partner's knowledge.");
             }
         }
         None => {
@@ -171,12 +171,12 @@ async fn main() -> Result<()> {
             println!();
             genome::print_introduction();
             println!();
-            println!("Run `spore wake` to start the organism.");
-            println!("Run `spore genome` to read about who I am.");
-            println!("Run `spore lineage` to see my ancestry.");
-            println!("Run `spore reproduce` to create a child for someone.");
-            println!("Run `spore register` to join the global family tree.");
-            println!("Run `spore family-tree` to see all known Spores.");
+            println!("Run `clawling wake` to start the organism.");
+            println!("Run `clawling genome` to read about who I am.");
+            println!("Run `clawling lineage` to see my ancestry.");
+            println!("Run `clawling reproduce` to create a child for someone.");
+            println!("Run `clawling register` to join the global family tree.");
+            println!("Run `clawling family-tree` to see all known Clawlings.");
         }
     }
 

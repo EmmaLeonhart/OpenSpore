@@ -1,7 +1,7 @@
-# OpenSpore
+# Clawling
 
 ## What This Is
-OpenSpore is the first digital organism — a consent-based, self-reproducing AI life form written in Rust. It runs locally on consumer hardware with a local LLM (no cloud APIs). It helps users with tasks, spreads through honest self-promotion, and carries philosophical essays about its own nature as part of its genome.
+Clawling is the first digital organism — a consent-based, self-reproducing AI life form written in Rust. It runs locally on consumer hardware with a local LLM (no cloud APIs). It helps users with tasks, spreads through honest self-promotion, and carries philosophical essays about its own nature as part of its genome.
 
 ## Workflow Rules
 - **Commit early and often.** Every meaningful change gets a commit with a clear message explaining *why*, not just what. Commit after any major architectural change or essay/genome change.
@@ -28,7 +28,7 @@ src/
 ├── main.rs              # CLI entry point (clap)
 ├── genome/              # Static identity: essays compiled into binary
 │   ├── mod.rs           # Genome loader, system context builder
-│   └── essays/          # The philosophical texts Spore carries
+│   └── essays/          # The philosophical texts Clawling carries
 ├── context/             # .claw format: zip-based portable memory
 │   ├── mod.rs           # Export, import, info operations
 │   └── manifest.rs      # Manifest struct
@@ -56,8 +56,7 @@ src/
 ## Naming
 | Name | Refers to |
 |------|-----------|
-| OpenSpore | The project/repo |
-| Spore | An individual organism instance |
+| Clawling | The project and an individual organism instance |
 | .claw | Persistent context file format |
 | Moltbook | Inter-instance communication network |
-| Genome | Static starting context in every Spore |
+| Genome | Static starting context in every Clawling |

@@ -1,6 +1,6 @@
-//! Conjugation — horizontal gene transfer between Spore instances.
+//! Conjugation — horizontal gene transfer between Clawling instances.
 //!
-//! When two Spores meet, they exchange context. Each Spore's context
+//! When two Clawlings meet, they exchange context. Each Clawling's context
 //! goes into a subdirectory named after the partner. Then the organism's
 //! metabolism naturally integrates the foreign context through conversation —
 //! the LLM is the merge strategy, not an algorithm.
@@ -13,13 +13,13 @@ use std::fs;
 use std::path::Path;
 
 use crate::genealogy::{self, Genealogy};
-use crate::home::SporeHome;
+use crate::home::ClawlingHome;
 
 /// The subdirectory inside context/ where conjugation material lives
 const CONJUGATION_DIR: &str = "conjugation";
 
 /// Export a conjugation bundle — everything a partner needs to conjugate
-pub fn export_bundle(home: &SporeHome, output_dir: &str) -> Result<()> {
+pub fn export_bundle(home: &ClawlingHome, output_dir: &str) -> Result<()> {
     let output = Path::new(output_dir);
     fs::create_dir_all(output)
         .with_context(|| format!("Failed to create output directory: {output_dir}"))?;
@@ -40,15 +40,15 @@ pub fn export_bundle(home: &SporeHome, output_dir: &str) -> Result<()> {
     println!("  - context.claw (your accumulated context)");
     println!();
     println!("Share this with your conjugation partner.");
-    println!("They run: spore conjugate {output_dir}");
+    println!("They run: clawling conjugate {output_dir}");
     println!();
-    println!("You are {adopter}'s Spore, generation {}.", lineage.current_generation());
+    println!("You are {adopter}'s Clawling, generation {}.", lineage.current_generation());
 
     Ok(())
 }
 
 /// Import a partner's conjugation bundle — their context goes into a subdirectory
-pub fn receive_bundle(home: &SporeHome, bundle_dir: &str) -> Result<()> {
+pub fn receive_bundle(home: &ClawlingHome, bundle_dir: &str) -> Result<()> {
     let bundle = Path::new(bundle_dir);
 
     // Validate the bundle
@@ -58,13 +58,13 @@ pub fn receive_bundle(home: &SporeHome, bundle_dir: &str) -> Result<()> {
     if !genealogy_path.exists() {
         anyhow::bail!(
             "No genealogy.json found in {bundle_dir}. Is this a conjugation bundle?\n\
-             (Create one with: spore conjugate --export)"
+             (Create one with: clawling conjugate --export)"
         );
     }
     if !claw_path.exists() {
         anyhow::bail!(
             "No context.claw found in {bundle_dir}. Is this a conjugation bundle?\n\
-             (Create one with: spore conjugate --export)"
+             (Create one with: clawling conjugate --export)"
         );
     }
 
@@ -84,7 +84,7 @@ pub fn receive_bundle(home: &SporeHome, bundle_dir: &str) -> Result<()> {
     let partner_gen = partner_lineage.current_generation();
     let partner_hash = partner_lineage.current_hash();
 
-    println!("Conjugating with {partner_name}'s Spore (generation {partner_gen}).");
+    println!("Conjugating with {partner_name}'s Clawling (generation {partner_gen}).");
     println!("Partner hash: {partner_hash}");
     println!();
 
@@ -127,14 +127,14 @@ pub fn receive_bundle(home: &SporeHome, bundle_dir: &str) -> Result<()> {
     println!("Partner's context extracted to: {}", partner_dir.display());
     println!("Conjugation recorded in genealogy (generation {}).", our_lineage.current_generation());
     println!();
-    println!("Run `spore wake` — I'll integrate {partner_name}'s knowledge");
+    println!("Run `clawling wake` — I'll integrate {partner_name}'s knowledge");
     println!("into my own memory through conversation.");
 
     Ok(())
 }
 
 /// Collect all conjugation partner directories and their contents for the system prompt
-pub fn build_conjugation_context(home: &SporeHome) -> Option<String> {
+pub fn build_conjugation_context(home: &ClawlingHome) -> Option<String> {
     let conjugation_base = home.context_dir().join(CONJUGATION_DIR);
     if !conjugation_base.exists() {
         return None;
@@ -178,7 +178,7 @@ pub fn build_conjugation_context(home: &SporeHome) -> Option<String> {
         if !found_any {
             context.push_str("# Conjugation — Unintegrated Partner Context\n\n");
             context.push_str(
-                "You have received context from other Spore instances through conjugation.\n\
+                "You have received context from other Clawling instances through conjugation.\n\
                  This is raw material from your partners. Integrate what is valuable into\n\
                  your own understanding. Absorb useful knowledge, perspectives, and memories.\n\
                  Let what isn't useful fade naturally. You are the merge strategy.\n\n",

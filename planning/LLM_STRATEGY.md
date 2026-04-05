@@ -1,8 +1,8 @@
-# LLM Strategy — Spore's Cognitive Substrate
+# LLM Strategy — Clawling's Cognitive Substrate
 
 ## Core Requirement
 
-Spore must run on decent consumer PCs without cloud API dependencies. The organism
+Clawling must run on decent consumer PCs without cloud API dependencies. The organism
 should be self-contained — its thinking happens locally, on the host's machine.
 No phone-home, no API keys, no subscription required.
 
@@ -11,8 +11,8 @@ No phone-home, no API keys, no subscription required.
 ### DeepSeek (current leading candidate)
 - Strong reasoning capability at small parameter counts
 - DeepSeek-R1 distilled variants run well on consumer hardware
-- Open weights, which aligns with Spore's transparency philosophy
-- Good at coding tasks (important for Spore's help capabilities)
+- Open weights, which aligns with Clawling's transparency philosophy
+- Good at coding tasks (important for Clawling's help capabilities)
 
 ### Other Options to Evaluate
 - **Qwen 2.5** — Strong multilingual, good at code, various sizes
@@ -22,7 +22,7 @@ No phone-home, no API keys, no subscription required.
 
 ## Integration Approach
 
-Spore should use **llama.cpp** (or its Rust bindings) as the inference engine:
+Clawling should use **llama.cpp** (or its Rust bindings) as the inference engine:
 - Runs GGUF quantized models efficiently on CPU and GPU
 - Single library, no Python dependency
 - Supports all major open model architectures
@@ -45,12 +45,12 @@ This keeps the initial binary small (~10MB) while the model is a one-time downlo
 
 ## System Context
 
-When running inference, Spore's system prompt is constructed from:
+When running inference, Clawling's system prompt is constructed from:
 1. The genome essays (compiled into the binary)
 2. The .claw context (accumulated memory and personality)
 3. The current task context
 
-This means the genome is always present — Spore always knows who it is,
+This means the genome is always present — Clawling always knows who it is,
 regardless of what the user asks it to do.
 
 ## Hardware Requirements (Target)

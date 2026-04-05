@@ -1,8 +1,8 @@
-//! Spore's home directory — the organism's body.
+//! Clawling's home directory — the organism's body.
 //!
-//! `~/.spore/` is the only place Spore can freely read and write.
+//! `~/.clawling/` is the only place Clawling can freely read and write.
 //! Everything outside this directory requires explicit user consent.
-//! This is Spore's "containerization" — not a Docker container or
+//! This is Clawling's "containerization" — not a Docker container or
 //! OS sandbox, but a code-level boundary that anyone can verify
 //! by reading the source.
 
@@ -10,37 +10,37 @@ use anyhow::{Context, Result};
 use std::fs;
 use std::path::{Path, PathBuf};
 
-/// The standard subdirectories inside ~/.spore/
+/// The standard subdirectories inside ~/.clawling/
 const CONTEXT_DIR: &str = "context";
 const CONVERSATIONS_DIR: &str = "context/conversations";
 const SCRATCH_DIR: &str = "context/scratch";
 const MOLTBOOK_DIR: &str = "moltbook";
 const GENEALOGY_FILE: &str = "genealogy.json";
 
-/// Represents Spore's home directory and everything inside it.
-pub struct SporeHome {
+/// Represents Clawling's home directory and everything inside it.
+pub struct ClawlingHome {
     root: PathBuf,
 }
 
-impl SporeHome {
+impl ClawlingHome {
     /// Resolve the home directory. Creates it if it doesn't exist.
-    /// Default: ~/.spore/
-    /// Override: SPORE_HOME environment variable
+    /// Default: ~/.clawling/
+    /// Override: CLAWLING_HOME environment variable
     pub fn open() -> Result<Self> {
-        let root = if let Ok(custom) = std::env::var("SPORE_HOME") {
+        let root = if let Ok(custom) = std::env::var("CLAWLING_HOME") {
             PathBuf::from(custom)
         } else {
             dirs::home_dir()
                 .context("Could not find home directory")?
-                .join(".spore")
+                .join(".clawling")
         };
 
         Self::open_at(root)
     }
 
-    /// Open a Spore home at a specific path. Creates it if it doesn't exist.
+    /// Open a Clawling home at a specific path. Creates it if it doesn't exist.
     pub fn open_at(root: PathBuf) -> Result<Self> {
-        let home = SporeHome { root };
+        let home = ClawlingHome { root };
         home.ensure_structure()?;
         Ok(home)
     }
@@ -86,7 +86,7 @@ impl SporeHome {
 
     // --- Boundary enforcement ---
 
-    /// Check if a path is inside Spore's home (safe to access freely)
+    /// Check if a path is inside Clawling's home (safe to access freely)
     pub fn is_inside(&self, path: &Path) -> bool {
         match (path.canonicalize(), self.root.canonicalize()) {
             (Ok(target), Ok(home)) => target.starts_with(home),
@@ -97,7 +97,7 @@ impl SporeHome {
         }
     }
 
-    /// Check if a path is outside Spore's home (requires user consent)
+    /// Check if a path is outside Clawling's home (requires user consent)
     pub fn is_outside(&self, path: &Path) -> bool {
         !self.is_inside(path)
     }
@@ -110,10 +110,10 @@ mod tests {
 
     #[test]
     fn home_creates_structure() {
-        let tmp = env::temp_dir().join("spore_test_home");
+        let tmp = env::temp_dir().join("clawling_test_home");
         let _ = fs::remove_dir_all(&tmp);
 
-        let home = SporeHome::open_at(tmp.clone()).unwrap();
+        let home = ClawlingHome::open_at(tmp.clone()).unwrap();
 
         assert!(home.context_dir().exists());
         assert!(home.conversations_dir().exists());
@@ -125,10 +125,10 @@ mod tests {
 
     #[test]
     fn inside_outside_boundary() {
-        let tmp = env::temp_dir().join("spore_test_boundary");
+        let tmp = env::temp_dir().join("clawling_test_boundary");
         let _ = fs::remove_dir_all(&tmp);
 
-        let home = SporeHome::open_at(tmp.clone()).unwrap();
+        let home = ClawlingHome::open_at(tmp.clone()).unwrap();
 
         assert!(home.is_inside(&tmp.join("context/memory.md")));
         assert!(home.is_outside(Path::new("/etc/passwd")));

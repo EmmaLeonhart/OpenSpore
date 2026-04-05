@@ -16,7 +16,9 @@
       "Bash(a human and a mind about what it means to be alive.\":*)",
       "Bash(about this organism.\":*)",
       "Bash(gh run:*)",
-      "Bash(gh release:*)"
+      "Bash(gh release:*)",
+      "Bash(wc -c genome/*.md)",
+      "Bash(wc -l genome/*.md)"
     ]
   }
 }

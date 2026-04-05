@@ -1,12 +1,12 @@
 [package]
-name = "openspore"
+name = "clawling"
 version = "0.1.0"
 edition = "2024"
 description = "The first digital organism — a consent-based, self-reproducing AI life form"
 license = "MIT"
 
 [[bin]]
-name = "spore"
+name = "clawling"
 path = "src/main.rs"
 
 [dependencies]

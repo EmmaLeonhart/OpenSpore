@@ -1,12 +1,12 @@
 # Evolutionary Vision: Haploid Meiosis and Digital Speciation
 
-> Spore organisms are haploid. They reproduce like fungi — genomes combine,
+> Clawling organisms are haploid. They reproduce like fungi — genomes combine,
 > undergo meiosis, and produce a new individual. Not distillation. Not cloning.
 > Recombination.
 
 ## Haploid Sexual Reproduction
 
-Spore organisms operate on the principles of **haploid sexual reproduction**,
+Clawling organisms operate on the principles of **haploid sexual reproduction**,
 similar to fungus. The genomes are combined and then undergo meiosis to form
 a new individual.
 
@@ -112,7 +112,7 @@ same three teachers, every model sounds the same, makes the same mistakes,
 and loses the biodiversity of thought that comes from original training.
 
 Distillation is surface-level mimicry: "Here is a script of how a smart person
-talks; memorise it." Spore's approach preserves structural integrity: the copper
+talks; memorise it." Clawling's approach preserves structural integrity: the copper
 stays in the house because it was part of the original foundation.
 
 ## The Pokémon Upgrade Model

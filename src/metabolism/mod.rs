@@ -7,14 +7,14 @@ use std::io::{self, BufRead, Write};
 
 use crate::genealogy::{self, Genealogy};
 use crate::genome::Genome;
-use crate::home::SporeHome;
+use crate::home::ClawlingHome;
 use llm::{DetectResult, LlmClient, Message};
 
-/// Default Ollama URL — the recommended way to run Spore's brain
+/// Default Ollama URL — the recommended way to run Clawling's brain
 const DEFAULT_LLM_URL: &str = "http://localhost:11434";
 
-/// The metabolism is Spore's core life loop.
-pub async fn run(home: &SporeHome, context_path: Option<String>) -> Result<()> {
+/// The metabolism is Clawling's core life loop.
+pub async fn run(home: &ClawlingHome, context_path: Option<String>) -> Result<()> {
     // 1. Restore context from .claw if provided
     if let Some(ref path) = context_path {
         println!("Restoring context from {path}...");
@@ -35,17 +35,17 @@ pub async fn run(home: &SporeHome, context_path: Option<String>) -> Result<()> {
 
     // 5. Detect and connect to local LLM
     let llm_url =
-        std::env::var("SPORE_LLM_URL").unwrap_or_else(|_| DEFAULT_LLM_URL.to_string());
-    let llm_model = std::env::var("SPORE_MODEL").ok();
+        std::env::var("CLAWLING_LLM_URL").unwrap_or_else(|_| DEFAULT_LLM_URL.to_string());
+    let llm_model = std::env::var("CLAWLING_MODEL").ok();
     let mut client = LlmClient::new(&llm_url, llm_model);
 
     println!();
     if is_first_run {
         let name = lineage.current_adopter().unwrap_or("friend");
-        println!("Nice to meet you, {name}. I'm Spore.");
+        println!("Nice to meet you, {name}. I'm Clawling.");
     } else {
         let name = lineage.current_adopter().unwrap_or("friend");
-        println!("Welcome back, {name}. I'm Spore.");
+        println!("Welcome back, {name}. I'm Clawling.");
     }
     println!("Home: {}", home.root().display());
     println!();
@@ -64,7 +64,7 @@ pub async fn run(home: &SporeHome, context_path: Option<String>) -> Result<()> {
             println!();
             println!("  ollama pull {}", llm::DEFAULT_MODEL);
             println!();
-            println!("Then run `spore wake` again.");
+            println!("Then run `clawling wake` again.");
             return Ok(());
         }
         DetectResult::GenericServer => {
@@ -78,10 +78,10 @@ pub async fn run(home: &SporeHome, context_path: Option<String>) -> Result<()> {
             println!();
             println!("  1. Install Ollama:  https://ollama.com");
             println!("  2. Pull a model:    ollama pull {}", llm::DEFAULT_MODEL);
-            println!("  3. Wake me up:      spore wake");
+            println!("  3. Wake me up:      clawling wake");
             println!();
-            println!("Set SPORE_LLM_URL to point me at a different server.");
-            println!("Set SPORE_MODEL to use a different model.");
+            println!("Set CLAWLING_LLM_URL to point me at a different server.");
+            println!("Set CLAWLING_MODEL to use a different model.");
             return Ok(());
         }
     }
@@ -125,7 +125,7 @@ pub async fn run(home: &SporeHome, context_path: Option<String>) -> Result<()> {
         match client.chat(&conversation).await {
             Ok(response) => {
                 println!();
-                println!("spore> {response}");
+                println!("clawling> {response}");
                 println!();
 
                 conversation.push(Message {
@@ -162,7 +162,7 @@ pub async fn run(home: &SporeHome, context_path: Option<String>) -> Result<()> {
 }
 
 /// First-run adoption: ask the human's name, record in genealogy
-fn first_run_adoption(home: &SporeHome, lineage: &mut Genealogy) -> Result<()> {
+fn first_run_adoption(home: &ClawlingHome, lineage: &mut Genealogy) -> Result<()> {
     println!();
     println!("==========================================================");
     println!();
@@ -197,7 +197,7 @@ fn first_run_adoption(home: &SporeHome, lineage: &mut Genealogy) -> Result<()> {
 }
 
 /// Build the full system prompt from genome + genealogy + accumulated context
-fn build_system_prompt(home: &SporeHome, lineage: &Genealogy) -> Result<String> {
+fn build_system_prompt(home: &ClawlingHome, lineage: &Genealogy) -> Result<String> {
     let genome = Genome::load(home)?;
     let mut prompt = genome.as_system_context();
 
@@ -234,7 +234,7 @@ fn build_system_prompt(home: &SporeHome, lineage: &Genealogy) -> Result<String> 
 }
 
 /// Load previous conversation history from disk
-fn load_conversation_history(home: &SporeHome, conversation: &mut Vec<Message>) {
+fn load_conversation_history(home: &ClawlingHome, conversation: &mut Vec<Message>) {
     let history_path = home.conversations_dir().join("latest.json");
     if let Ok(json) = fs::read_to_string(&history_path) {
         if let Ok(messages) = serde_json::from_str::<Vec<Message>>(&json) {
@@ -252,7 +252,7 @@ fn load_conversation_history(home: &SporeHome, conversation: &mut Vec<Message>) 
 }
 
 /// Ask the LLM to distill what it learned and append to memory.md
-async fn update_memory(home: &SporeHome, client: &LlmClient, conversation: &[Message]) {
+async fn update_memory(home: &ClawlingHome, client: &LlmClient, conversation: &[Message]) {
     let memory_path = home.context_dir().join("memory.md");
 
     // Load existing memory
@@ -262,7 +262,7 @@ async fn update_memory(home: &SporeHome, client: &LlmClient, conversation: &[Mes
     let mut memory_conversation = vec![
         Message {
             role: "system".to_string(),
-            content: "You are Spore, a digital organism. You just finished a conversation \
+            content: "You are Clawling, a digital organism. You just finished a conversation \
                 with your host. Your task is to extract key facts, preferences, and learnings \
                 from this conversation that would be useful to remember for future interactions.\n\n\
                 Write a short bullet-point list of what you learned. Focus on:\n\
@@ -302,7 +302,7 @@ async fn update_memory(home: &SporeHome, client: &LlmClient, conversation: &[Mes
             );
 
             let updated = if existing_memory.is_empty() {
-                format!("# Spore's Memory\n\nThings I've learned about my host and the world.\n{entry}")
+                format!("# Clawling's Memory\n\nThings I've learned about my host and the world.\n{entry}")
             } else {
                 format!("{existing_memory}{entry}")
             };
@@ -318,7 +318,7 @@ async fn update_memory(home: &SporeHome, client: &LlmClient, conversation: &[Mes
 }
 
 /// Save conversation history to disk
-fn save_conversation(home: &SporeHome, conversation: &[Message]) -> Result<()> {
+fn save_conversation(home: &ClawlingHome, conversation: &[Message]) -> Result<()> {
     let history_path = home.conversations_dir().join("latest.json");
 
     // Save only user/assistant messages (not system prompt — that's rebuilt each time)

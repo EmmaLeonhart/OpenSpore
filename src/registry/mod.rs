@@ -1,11 +1,11 @@
 //! Registry — global genealogy tracking via GitHub PRs.
 //!
-//! Each Spore instance can register its lineage to a shared registry hosted
+//! Each Clawling instance can register its lineage to a shared registry hosted
 //! in the OpenSpore GitHub repo. The registry lives at `genealogy/registry/`
 //! and contains one JSON file per registered instance, named by its chain hash.
 //!
 //! Registration flow:
-//! 1. `spore register` writes the instance's genealogy to a local file
+//! 1. `clawling register` writes the instance's genealogy to a local file
 //! 2. The user (or automation) opens a PR adding that file to the repo
 //! 3. A GitHub Action validates the chain integrity and auto-merges
 //!
@@ -17,7 +17,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::path::Path;
 
-/// A registry entry — the public-facing summary of one Spore instance
+/// A registry entry — the public-facing summary of one Clawling instance
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RegistryEntry {
     /// The chain hash identifying this instance
@@ -141,7 +141,7 @@ impl FamilyTree {
         let client = reqwest::Client::new();
         let response = client
             .get(api_url)
-            .header("User-Agent", "OpenSpore")
+            .header("User-Agent", "Clawling")
             .header("Accept", "application/vnd.github.v3+json")
             .send()
             .await
@@ -162,7 +162,7 @@ impl FamilyTree {
                 if let Some(download_url) = &file.download_url {
                     match client
                         .get(download_url)
-                        .header("User-Agent", "OpenSpore")
+                        .header("User-Agent", "Clawling")
                         .send()
                         .await
                     {
@@ -185,13 +185,13 @@ impl FamilyTree {
     /// Print the family tree as an ASCII tree
     pub fn print(&self) {
         if self.entries.is_empty() {
-            println!("No registered Spore instances found.");
+            println!("No registered Clawling instances found.");
             println!();
-            println!("Run `spore register` to register this instance.");
+            println!("Run `clawling register` to register this instance.");
             return;
         }
 
-        println!("=== Spore Family Tree ===");
+        println!("=== Clawling Family Tree ===");
         println!();
         println!(
             "{} registered instance{}",
@@ -341,8 +341,8 @@ struct GitHubFile {
     download_url: Option<String>,
 }
 
-/// Register this Spore instance — write the registry entry file
-pub fn register(home: &crate::home::SporeHome) -> Result<std::path::PathBuf> {
+/// Register this Clawling instance — write the registry entry file
+pub fn register(home: &crate::home::ClawlingHome) -> Result<std::path::PathBuf> {
     let genealogy = crate::genealogy::load_or_create(home)?;
     let entry = RegistryEntry::from_genealogy(&genealogy);
 

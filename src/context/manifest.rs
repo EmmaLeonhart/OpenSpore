@@ -13,10 +13,10 @@ pub struct Manifest {
 impl Manifest {
     pub fn new(files: &[String]) -> Self {
         Manifest {
-            format: "openspore-context".to_string(),
+            format: "clawling-context".to_string(),
             version: "0.1".to_string(),
             created_at: Utc::now().to_rfc3339(),
-            generated_by: "openspore".to_string(),
+            generated_by: "clawling".to_string(),
             context_files: files.iter().map(|f| format!("context/{f}")).collect(),
         }
     }
@@ -30,9 +30,9 @@ mod tests {
     fn manifest_has_correct_format() {
         let files = vec!["notes.md".to_string(), "memory.json".to_string()];
         let manifest = Manifest::new(&files);
-        assert_eq!(manifest.format, "openspore-context");
+        assert_eq!(manifest.format, "clawling-context");
         assert_eq!(manifest.version, "0.1");
-        assert_eq!(manifest.generated_by, "openspore");
+        assert_eq!(manifest.generated_by, "clawling");
     }
 
     #[test]
@@ -47,7 +47,7 @@ mod tests {
         let files = vec!["test.md".to_string()];
         let manifest = Manifest::new(&files);
         let json = serde_json::to_string(&manifest).unwrap();
-        assert!(json.contains("openspore-context"));
+        assert!(json.contains("clawling-context"));
         assert!(json.contains("context/test.md"));
     }
 

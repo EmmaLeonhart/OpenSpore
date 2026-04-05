@@ -1,6 +1,6 @@
 # Frontier Vision: Dimension Reduction, JEPA, and Post-Transformer Thinking
 
-> The ideas behind OpenSpore extend beyond the agent framework itself. This
+> The ideas behind Clawling extend beyond the agent framework itself. This
 > document captures the broader technical vision — where AI architecture should
 > go and why the current paradigm is insufficient.
 
@@ -180,7 +180,7 @@ trajectory** through the model's reasoning.
 
 ## The Drosophila Connection
 
-All of these ideas feed back into OpenSpore's organisms:
+All of these ideas feed back into Clawling's organisms:
 
 - **Clipping** could eventually apply to the model weights themselves, not just context
 - **JEPA-style intuition** could replace autoregressive generation for organism reasoning

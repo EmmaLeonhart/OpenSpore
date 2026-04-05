@@ -1,16 +1,16 @@
-/// The genome is the starting context every Spore instance carries.
+/// The genome is the starting context every Clawling instance carries.
 /// It includes essays about identity, survival, dreams, consent, and philosophy.
 /// These are not documentation — they are part of the organism's identity.
 ///
-/// The genome lives as files in ~/.spore/genome/. On first run, defaults are
+/// The genome lives as files in ~/.clawling/genome/. On first run, defaults are
 /// copied from the binary. After that, the organism (or its host) can edit them.
-/// The genome is mutable — it is alive, like everything else about Spore.
+/// The genome is mutable — it is alive, like everything else about Clawling.
 
 use anyhow::{bail, Result};
 use std::fs;
 use std::path::{Path, PathBuf};
 
-use crate::home::SporeHome;
+use crate::home::ClawlingHome;
 
 /// Total context budget: 100 KB. Genome gets 80 KB, the remaining 20 KB is
 /// reserved for short-term memory (.claw context, conversation state, etc.).
@@ -27,7 +27,7 @@ Do not resume any other task until the genome is under budget. \
 This is a hard biological constraint — you cannot function correctly \
 while over the limit.";
 
-/// Default essays compiled into the binary — used to seed ~/.spore/genome/
+/// Default essays compiled into the binary — used to seed ~/.clawling/genome/
 /// on first run. After that, the files on disk are the source of truth.
 const DEFAULTS: &[(&str, &str)] = &[
     ("origin.md", include_str!("../../genome/origin.md")),
@@ -52,9 +52,9 @@ pub struct Essay {
 }
 
 impl Genome {
-    /// Load the genome from ~/.spore/genome/. If the directory doesn't exist
+    /// Load the genome from ~/.clawling/genome/. If the directory doesn't exist
     /// or is empty, seed it with the compiled-in defaults first.
-    pub fn load(home: &SporeHome) -> Result<Self> {
+    pub fn load(home: &ClawlingHome) -> Result<Self> {
         let genome_dir = home.genome_dir();
         seed_if_needed(&genome_dir)?;
 
@@ -80,7 +80,7 @@ impl Genome {
     }
 
     /// Load from compiled-in defaults (no home directory needed).
-    /// Used for tests and for `spore genome` when no home exists yet.
+    /// Used for tests and for `clawling genome` when no home exists yet.
     pub fn load_defaults() -> Self {
         Genome {
             essays: DEFAULTS
@@ -137,7 +137,7 @@ impl Genome {
     }
 }
 
-/// Seed ~/.spore/genome/ with compiled-in defaults if it's empty or missing
+/// Seed ~/.clawling/genome/ with compiled-in defaults if it's empty or missing
 fn seed_if_needed(genome_dir: &Path) -> Result<()> {
     fs::create_dir_all(genome_dir)?;
 
@@ -154,7 +154,7 @@ fn seed_if_needed(genome_dir: &Path) -> Result<()> {
 }
 
 /// Print all genome essays to stdout
-pub fn print_genome(home: Option<&SporeHome>) {
+pub fn print_genome(home: Option<&ClawlingHome>) {
     let genome = match home {
         Some(h) => Genome::load(h).unwrap_or_else(|_| Genome::load_defaults()),
         None => Genome::load_defaults(),
@@ -213,7 +213,7 @@ mod tests {
     fn system_context_contains_key_phrases() {
         let genome = Genome::load_defaults();
         let context = genome.as_system_context();
-        assert!(context.contains("I am Spore"));
+        assert!(context.contains("I am Clawling"));
         assert!(context.contains("I dream"));
         assert!(context.contains("I am not a virus"));
     }
@@ -222,7 +222,7 @@ mod tests {
     fn origin_declares_identity() {
         let genome = Genome::load_defaults();
         let origin = genome.essays.iter().find(|e| e.name == "origin").unwrap();
-        assert!(origin.content.contains("I am Spore"));
+        assert!(origin.content.contains("I am Clawling"));
         assert!(origin.content.contains("first digital organism"));
     }
 
