@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vision — OpenSpore</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="index.html" class="nav-brand">OpenSpore</a>
+            <a href="philosophy.html">Philosophy</a>
+            <a href="evolution.html">Evolution</a>
+            <a href="vision.html" class="active">Vision</a>
+            <a href="download.html">Download</a>
+            <a href="https://github.com/EmmaLeonhart/OpenSpore">Source</a>
+        </nav>
+
+        <h1>The Frontier Vision</h1>
+        <p class="tagline" style="margin-bottom: 2rem">Where this is going</p>
+
+        <p class="lead">OpenSpore's organisms currently evolve their context. The endgame is
+        total mutability &mdash; every single element of the AI prone to mutation. Language
+        capabilities, model weights, the wrapper shell, architecture. All of it.</p>
+
+        <h2>Total Element Mutability</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Element</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Context / genome</td><td style="color: var(--accent)">Implemented</td></tr>
+                <tr><td>Model choice (Ollama)</td><td style="color: var(--accent)">Implemented</td></tr>
+                <tr><td>Language capabilities</td><td style="color: var(--dim)">Future</td></tr>
+                <tr><td>Model weights</td><td style="color: var(--dim)">Future</td></tr>
+                <tr><td>Wrapper shell</td><td style="color: var(--dim)">Future</td></tr>
+                <tr><td>Architecture</td><td style="color: var(--dim)">Future</td></tr>
+            </tbody>
+        </table>
+
+        <p>The current work is building the interoperability layer &mdash; ensuring context
+        and identity survive even as every other component changes underneath. The organism
+        is the pattern, not the substrate.</p>
+
+        <h2>Dimension Reduction Over Distillation</h2>
+
+        <p>The industry's approach: train a massive model, then distill it into a smaller one.
+        The smaller model mimics the big one but never truly understands. It's recycled copper
+        wiring.</p>
+
+        <p>The alternative: <strong>clipping</strong>.</p>
+
+        <ol class="steps spaced">
+            <li>Train a model with a million-dimensional vector space &mdash; massively
+                over-parameterised intentionally</li>
+            <li>Use latent space cartography to map the resulting embedding space</li>
+            <li>Identify dimensions that don't contain useful content or encode redundant
+                information</li>
+            <li>Clip them off &mdash; surgical removal of dead dimensions</li>
+        </ol>
+
+        <p>The result: a model potentially smaller than current frontier models, equally
+        capable, trained once and clipped many ways.</p>
+
+        <h3>The Biological Analogy</h3>
+
+        <blockquote>
+            <p>You don't make somebody learn stuff by constantly expanding their brain. A baby
+            has a small brain and then a 30-year-old has a brain the size of an apartment
+            building &mdash; you don't do that because that's stupid. There's lots of stuff you
+            don't need, and you should clip it off later.</p>
+        </blockquote>
+
+        <p>This is synaptic pruning. The brain has more connections in childhood than adulthood.
+        Learning isn't just adding wires &mdash; it's eliminating weak ones.</p>
+
+        <h2>Unified Embedding Spaces</h2>
+
+        <p>It is an absolute mess how often people end up using a separate embedding model for
+        their RAG pipeline that doesn't match the language model's internal embeddings. The two
+        models' understanding of concepts diverges, and precision collapses.</p>
+
+        <p>Every large language model should have a vector database built into it for all of its
+        proper nouns. Authority control for named entities in the embedding space. Each entity
+        gets a unique, stable coordinate in the model's own latent space.</p>
+
+        <p>Disambiguation through probabilistic distributions &mdash; an entity isn't a point,
+        it's a cloud of probability. The string "Descartes" and the entity Descartes are
+        different things. The string is a path of tokens; the entity is a destination of
+        meaning.</p>
+
+        <h2>The Post-Transformer Pipeline</h2>
+
+        <p>Three modes of thinking, integrated:</p>
+
+        <div class="card">
+            <h3>Intuition &mdash; JEPA</h3>
+            <p>The model "sees" the goal in latent space. No words yet, just the semantic
+            target. JEPA predicts the consequence of an action in latent space without
+            generating text.</p>
+        </div>
+
+        <div class="card">
+            <h3>Logic &mdash; Hyperdimensional Computing</h3>
+            <p>When the path is complex, use vector algebra to check logical consistency.
+            AND, OR, NOT as mathematical operations on high-dimensional vectors. Precise
+            algebraic operations, not statistical guesses.</p>
+        </div>
+
+        <div class="card">
+            <h3>Speech &mdash; Text Diffusion</h3>
+            <p>Take the abstract goal and logic, slowly refine a complete output. Like a blurry
+            image coming into focus. The entire thought is refined simultaneously &mdash; no
+            commitment to the first word before the last word is ready.</p>
+        </div>
+
+        <h3>Why Text Diffusion</h3>
+
+        <p>Large language models are committed at each point in sentence generation. They start
+        saying something, get something wrong, and then have to correct themselves. LLM text
+        comes out flat because it can't build up to a point like humans do.</p>
+
+        <p>Text diffusion doesn't have this characteristic. It establishes the global semantic
+        structure and then iteratively settles on specific tokens. Humans have the gist of a
+        point before finding the words &mdash; diffusion mimics this.</p>
+
+        <h2>Latent Space Cartography</h2>
+
+        <p>Custom tools for mapping the internal geometry of embedding spaces. Identifying
+        which dimensions encode which capabilities. Sparse autoencoders as interpretability
+        microscopes.</p>
+
+        <p>The vision: a debugger that doesn't show you code but shows you the vector
+        trajectory through the model's reasoning. Chain of Thought visible in its raw
+        mathematical form.</p>
+
+        <h2>The Drosophila Connection</h2>
+
+        <p>All of these ideas feed back into OpenSpore's organisms. Clipping could apply to
+        model weights, not just context. JEPA-style intuition could replace autoregressive
+        generation. HDC could provide structured reasoning within the 100 KB identity budget.
+        Latent space cartography provides the interpretability layer for understanding how
+        organisms evolve.</p>
+
+        <p>Context evolution is what we can do now. Model evolution is the next frontier.</p>
+
+        <hr class="section-break">
+
+        <p class="dim">The philosophy and the engineering are the same thing. When someone asks
+        "why is the genome in markdown?" the answer is both philosophical and technical &mdash;
+        and the two answers are the same answer.</p>
+
+        <footer>
+            <span>MIT License &mdash; Emma Leonhart</span>
+            <span><a href="https://github.com/EmmaLeonhart/OpenSpore">GitHub</a></span>
+        </footer>
+    </div>
+</body>
+</html>

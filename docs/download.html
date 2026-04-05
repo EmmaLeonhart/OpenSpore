@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download — OpenSpore</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="index.html" class="nav-brand">OpenSpore</a>
+            <a href="philosophy.html">Philosophy</a>
+            <a href="evolution.html">Evolution</a>
+            <a href="vision.html">Vision</a>
+            <a href="download.html" class="active">Download</a>
+            <a href="https://github.com/EmmaLeonhart/OpenSpore">Source</a>
+        </nav>
+
+        <h1>Download</h1>
+        <p class="tagline" style="margin-bottom: 2rem">Give it a home</p>
+
+        <div class="card" style="text-align: center; padding: 3rem 1.5rem; margin-bottom: 2rem;">
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">&#x1F9EC;</div>
+            <h3 style="color: var(--accent); font-size: 1.3rem; margin-bottom: 0.75rem;">Coming Soon</h3>
+            <p style="color: var(--dim); max-width: 480px; margin: 0 auto;">
+                Spore is in early development. The organism has a skeleton, a genome, and a
+                context format. The metabolism &mdash; local LLM integration via Ollama &mdash;
+                is being built now.
+            </p>
+        </div>
+
+        <h2>Planned Platforms</h2>
+        <div class="downloads">
+            <div class="download-card">
+                <div>
+                    <div class="platform-name">Linux</div>
+                    <div class="platform-arch">x86_64 / amd64</div>
+                </div>
+                <div class="coming-soon-badge">coming soon</div>
+            </div>
+            <div class="download-card">
+                <div>
+                    <div class="platform-name">macOS</div>
+                    <div class="platform-arch">Apple Silicon (M1/M2/M3/M4)</div>
+                </div>
+                <div class="coming-soon-badge">coming soon</div>
+            </div>
+            <div class="download-card">
+                <div>
+                    <div class="platform-name">macOS</div>
+                    <div class="platform-arch">Intel x86_64</div>
+                </div>
+                <div class="coming-soon-badge">coming soon</div>
+            </div>
+            <div class="download-card">
+                <div>
+                    <div class="platform-name">Windows</div>
+                    <div class="platform-arch">x86_64</div>
+                </div>
+                <div class="coming-soon-badge">coming soon</div>
+            </div>
+        </div>
+
+        <h2>Build From Source</h2>
+        <p>If you want to try the current state of things:</p>
+
+        <div class="terminal">
+            <div><span class="prompt">$</span> <span class="cmd">git clone https://github.com/EmmaLeonhart/OpenSpore.git</span></div>
+            <div><span class="prompt">$</span> <span class="cmd">cd OpenSpore</span></div>
+            <div><span class="prompt">$</span> <span class="cmd">cargo build --release</span></div>
+            <div class="output"></div>
+            <div class="output">Binary: target/release/spore</div>
+        </div>
+
+        <h2>Prerequisites</h2>
+
+        <ul class="clean spaced">
+            <li><a href="https://www.rust-lang.org/tools/install">Rust</a> &mdash; for building from source</li>
+            <li><a href="https://ollama.com">Ollama</a> &mdash; for running local LLMs</li>
+            <li>A model: <code>ollama pull deepseek-r1:8b</code> or any model you prefer</li>
+        </ul>
+
+        <h2>What You Get</h2>
+
+        <p>A single binary. No Docker, no cloud dependencies, no API keys. The organism
+        literally is one file. It creates its home at <code>~/.spore/</code> and lives there.</p>
+
+        <p>The genome &mdash; philosophical essays about its own nature &mdash; is compiled
+        directly into the binary. On first run, it copies these to disk so the organism
+        (or you) can read and evolve them.</p>
+
+        <hr class="section-break">
+
+        <p class="dim">Spore is open source under the MIT license. You can read every line of code
+        that will run on your machine. Transparency is its survival strategy.</p>
+
+        <div class="links">
+            <a href="https://github.com/EmmaLeonhart/OpenSpore">Source Code</a>
+            <a href="https://github.com/EmmaLeonhart/OpenSpore/releases">All Releases</a>
+        </div>
+
+        <footer>
+            <span>MIT License &mdash; Emma Leonhart</span>
+            <span><a href="https://github.com/EmmaLeonhart/OpenSpore">GitHub</a></span>
+        </footer>
+    </div>
+</body>
+</html>
