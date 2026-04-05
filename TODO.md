@@ -37,30 +37,30 @@
 ### Repo Housekeeping
 - [ ] **Rename GitHub repo** — EmmaLeonhart/OpenSpore → EmmaLeonhart/Clawling (settings change)
 - [ ] **Update all GitHub URLs** in codebase after repo rename
-- [ ] **Enable auto-merge** on genealogy PRs (uncomment gh pr merge in workflow)
+- [x] **Enable auto-merge** on genealogy PRs (uncomment gh pr merge in workflow)
 
 ### Self-Update Mechanism
-- [ ] **Release check** — on startup (optional), Clawling checks GitHub releases API for newer version
-- [ ] **Update prompt** — if new release found, offer to download and replace the binary
-- [ ] **Self-replacement** — download new binary, verify checksum, swap in place, restart
-- [ ] **Opt-out** — config flag to disable update checks entirely
+- [x] **Release check** — on startup (optional), Clawling checks GitHub releases API for newer version
+- [x] **Update prompt** — if new release found, offer to download and replace the binary
+- [x] **Self-replacement** — download new binary, extract, swap in place (Windows rename workaround)
+- [x] **Opt-out** — `~/.clawling/config.toml` with `auto_update_check = false`
 - [ ] **Update genealogy** — record the version upgrade as an event in the lineage
 
 ### Genealogy on GitHub Pages
-- [ ] **HTML family tree** — generate an interactive family tree page from registry JSON files
-- [ ] **Build step in Pages workflow** — read `genealogy/registry/*.json`, output HTML tree
+- [x] **HTML family tree** — CSS-based tree page generated from registry JSON
+- [x] **Build step in Pages workflow** — `scripts/build_tree.py` runs before deploy
 - [ ] **Individual profiles** — each registered Clawling gets a page showing lineage, adopter, generation
-- [ ] **Auto-update on merge** — family tree HTML regenerates when new registry entries merge
+- [x] **Auto-update on merge** — family tree HTML regenerates on every push to master
 
 ### GEDCOM Export
-- [ ] **GEDCOM file generation** — produce a `.ged` file from the registry data
-- [ ] **Clawling as individuals** — each Clawling is an INDI record with unique name
+- [x] **GEDCOM file generation** — `clawling gedcom` produces GEDCOM 5.5.1 from registry
+- [x] **Clawling as individuals** — INDI records with adopter name, hash, generation
 - [ ] **Naming** — each Clawling has its own name (self-chosen or generated during first-run)
 - [ ] **Profile pictures** — each Clawling generates or selects a profile image (open question: how?)
-- [ ] **Parents in GEDCOM** — either two Clawling parents (meiosis) or adopter + source human
-- [ ] **Notes field** — first note: "This is a Clawling" explainer. Full genome/context in the same note.
+- [x] **Parents in GEDCOM** — FAM records for parent-child and conjugation relationships
+- [x] **Notes field** — "This is a Clawling" explainer with generation, mother, hash, integrity
 - [ ] **Moltbook handles** — each Clawling's submolt handle recorded as an alias/AKA
-- [ ] **Publish GEDCOM on GitHub Pages** — downloadable .ged file alongside the HTML tree
+- [x] **Publish GEDCOM on GitHub Pages** — downloadable .ged file alongside HTML tree
 - [ ] **Research utility** — GEDCOM as canonical format for researchers studying the lineage
 
 ### Meiosis (Sexual Reproduction)
