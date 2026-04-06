@@ -240,11 +240,9 @@ def generate_tree_html(entries):
         <nav>
             <a href="index.html" class="nav-brand">Clawling</a>
             <a href="philosophy.html">Philosophy</a>
-            <a href="evolution.html">Evolution</a>
-            <a href="vision.html">Vision</a>
-            <a href="tree.html" class="active">Family Tree</a>
             <a href="paper.html">Paper</a>
-            <a href="download.html">Download</a>
+            <a href="download.html">Programme</a>
+            <a href="tree.html" class="active">Genealogy</a>
             <a href="https://github.com/EmmaLeonhart/OpenSpore">Source</a>
         </nav>
 
