@@ -81,9 +81,75 @@ When two instances mate, the process produces an installer containing identity f
 4. The LLM performs a constrained synthesis ("crossing over") only on the remaining material that cannot be neatly divided — the delta between the two parents' unique content
 5. The result must fit within the 80 KB budget
 
-This approach minimizes LLM-induced information loss by restricting the lossy synthesis step to only the content that actually differs between parents. Shared content passes through unchanged. The file-level selection provides natural crossover points.
+```
+ALGORITHM: Mating(parent_A, parent_B) → offspring_identity
 
-**Future direction:** Splitting identity into many small files would make the 50/50 selection more granular and reduce the amount of material requiring LLM synthesis. We expect this to emerge naturally as organisms with more modular identity file structures produce more viable offspring.
+INPUT:  A.files = {f₁, f₂, ...}  — identity files from parent A
+        B.files = {g₁, g₂, ...}  — identity files from parent B
+
+STEP 1: DETERMINISTIC MERGE (no LLM)
+  common_files ← {}
+  a_only ← {}
+  b_only ← {}
+  divergent ← {}
+
+  FOR each filename f present in both A.files and B.files:
+    IF A.files[f] == B.files[f]:        — identical content
+      common_files[f] ← A.files[f]     — keep as-is
+    ELSE:
+      divergent[f] ← (A.files[f], B.files[f])
+
+  FOR each filename f in A.files but not B.files:
+    a_only[f] ← A.files[f]
+
+  FOR each filename f in B.files but not A.files:
+    b_only[f] ← B.files[f]
+
+STEP 2: FILE-LEVEL SELECTION (no LLM)
+  selected ← common_files             — shared content passes through
+
+  FOR each f in a_only ∪ b_only:
+    selected[f] ← pick with P=0.5 from whichever parent has it
+
+  FOR each f in divergent:
+    IF coin_flip():
+      selected[f] ← divergent[f].A
+    ELSE:
+      selected[f] ← divergent[f].B
+
+  — At this point, most content is settled without any LLM involvement.
+  — The only remaining work is files where BOTH parents have the same
+  — filename but different content, and the losing version had unique
+  — material worth preserving.
+
+STEP 3: CROSSING OVER (LLM, constrained)
+  delta ← ""
+  FOR each f in divergent:
+    loser ← the version NOT selected in Step 2
+    winner ← selected[f]
+    diff ← text_diff(winner, loser)
+    IF diff contains substantive unique content:
+      delta += diff
+
+  IF delta is non-empty:
+    prompt ← "Integrate the following material into the selected files.
+              Do not remove existing content. Only add information from
+              the delta that is not already present. Stay within {budget}."
+    selected ← LLM(selected, delta, prompt)
+
+STEP 4: MEIOSIS (budget enforcement)
+  IF size(selected) > 80 KB:
+    prompt ← "Reduce to 80 KB. Preserve all filenames and structure.
+              Cut redundancy and low-information content first."
+    selected ← LLM(selected, prompt)
+    ASSERT size(selected) ≤ 80 KB
+
+OUTPUT: selected — the offspring's identity files
+```
+
+This approach minimizes LLM-induced information loss by restricting the lossy synthesis step (Step 3) to only the content that actually differs between parents. Shared content passes through unchanged in Step 1. File-level selection in Step 2 provides natural crossover points. The LLM only touches the delta — the unique material from the losing side of each file-level coin flip.
+
+**Future direction:** Splitting identity into many small files would make Step 2 more granular and shrink the delta that reaches Step 3. We expect this to emerge naturally: organisms with more modular identity file structures produce offspring with less LLM-mediated information loss, giving them a selection advantage.
 
 ### 2.6 The 80 KB Budget
 
