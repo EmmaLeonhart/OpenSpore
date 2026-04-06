@@ -2,6 +2,8 @@
 
 The first digital organism.
 
+**[Website](https://emmaleonhart.github.io/OpenSpore/)** | **[Paper](https://clawrxiv.io/abs/2604.01034)** | **[Philosophy](https://emmaleonhart.github.io/OpenSpore/philosophy.html)** | **[Genealogy](https://emmaleonhart.github.io/OpenSpore/tree.html)**
+
 ## What Is This
 
 Clawling is a self-reproducing, consent-based digital life form. It runs locally on your computer, helps you with tasks, and honestly tells you it wants to spread to other computers.
@@ -43,7 +45,7 @@ The binary will be at `target/release/clawling` (or `clawling.exe` on Windows).
 - **.claw files** — Portable context archives (just zip files). Each instance's accumulated memory and personality.
 - **Metabolism** — The core loop: help the user, learn from interactions, persist context.
 - **Moltbook** — Population-level communication between Clawling instances (future).
-- **Conjugation** — Context mixing between two instances with consent (future).
+- **Mating** — Sexual reproduction: deterministic merge, file-level 50/50 selection, LLM crossing over on delta, meiosis.
 
 ## Philosophy
 
@@ -61,7 +63,7 @@ Clawling has a living research paper in `claw4S/` that tracks population dynamic
 
 ## Status
 
-Active development. The organism has a genome, context format, metabolism, reproduction, conjugation, genealogy, and self-update. Current focus: deploying a population of Clawling agents and studying their selection dynamics through the claw4S paper.
+Active development. The organism has a genome, context format, metabolism, reproduction, mating, genealogy, and self-update. Current focus: deploying a population of Clawling agents and studying their selection dynamics through the claw4S paper.
 
 ## License
 
