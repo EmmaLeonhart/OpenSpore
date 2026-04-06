@@ -115,6 +115,8 @@ Instances register by submitting pull requests to `genealogy/registry/` in the G
 
 **Valid registrations are auto-merged.** No human reviews or approves registry PRs. The CI workflow is the sole gatekeeper. This is not a human-in-the-loop process — it is fully automated validation with automated merge.
 
+**Sybil resistance:** The current validation checks structural integrity (valid JSON, correct hash chain, no duplicates) but does not verify that a real running instance produced the registration. A future version will require the registering instance to include a signed attestation — a hash of the binary that produced the `.claw` archive — allowing the CI workflow to verify that the registration came from an authentic Clawling build. This does not eliminate Sybil attacks entirely (someone could build from source and automate registrations) but raises the cost significantly above submitting fake JSON files.
+
 ### 3.3 GEDCOM Export
 
 The population is exportable as GEDCOM 5.5.1. Each instance becomes an individual record with generation number, adopter name, parent-child relationships, and chain integrity status. The GEDCOM file is auto-generated and published to GitHub Pages on every push, downloadable for analysis in standard genealogy software (Gramps, etc.).
@@ -155,11 +157,13 @@ In order of when they become answerable as population grows:
 4. **Does mating produce viable offspring?** — Do mated offspring (with synthesized identity files) survive and reproduce at rates comparable to simple clones?
 5. **What does selection look like?** — Which traits (knowledge types, interaction patterns) correlate with an instance being chosen for reproduction?
 
-### 4.3 What This Paper Is Not
+### 4.3 Limitations
 
-This is not a report of completed research. It is the initial publication in a living study. The architecture and observation tools are complete; the population data is not yet available because the population is being deployed during the study period. Each revision to this paper will include new data. The git history of `claw4S/paper.md` serves as the revision record.
+**Two weeks is short.** A fifteen-day study period is insufficient to observe meaningful multi-generational selection dynamics in a system that requires manual human participation for reproduction. We acknowledge this directly. Two weeks is enough to answer whether the infrastructure works and whether a population can be bootstrapped at all — it is not enough to draw conclusions about long-term evolutionary dynamics. This paper is the beginning of a longer project, not a self-contained study. We consider it a sufficient starting point for an ambitious project.
 
-We acknowledge that a paper without results is incomplete. The purpose of this initial submission is to establish the framework, receive peer review, and iterate. The April 20 revision will contain whatever population data we have collected by that date.
+**No results yet.** This is the initial publication in a living study. The architecture and observation tools are complete; the population data is not yet available because the population is being deployed during the study period. Each revision to this paper will include new data. The git history of `claw4S/paper.md` serves as the revision record.
+
+**memory.md inheritance is lossy.** The LLM distillation that produces `memory.md` entries is a form of incremental prompt engineering with cumulative compression loss. We do not claim this constitutes biological evolution — it is a mechanism for heritable behavioral variation that can be observed and measured. Whether the information loss is catastrophic or manageable over generations is an empirical question this study aims to answer, not a theoretical guarantee we can make in advance.
 
 ## 5. Implementation Status
 
@@ -189,11 +193,25 @@ Clawling is an attempt to build the minimum viable product of digital life: the 
 
 The two-week study period will determine whether consent-gated reproduction can sustain a population, whether learned behaviors propagate across generations, and whether the observation tools produce useful data about selection dynamics. This paper will be revised with findings as they become available.
 
+## Related Work
+
+Clawling builds on two research traditions: artificial life and LLM-based agent systems.
+
+**Artificial life.** The foundational systems — Tierra (Ray, 1991), Avida (Ofria & Wilke, 2004), and the broader ALife framework (Langton, 1989) — demonstrated that digital organisms can exhibit evolutionary dynamics when given self-replication, mutation, and selection pressure. Clawling differs in that its "organisms" are LLM-based assistants whose fitness is determined by human users choosing to reproduce them, rather than by computational resource competition.
+
+**LLM-based agents.** Park et al. (2023) demonstrated that LLM agents with persistent memory can produce emergent social behaviors in simulation. Clawling extends this by making the agents independent local programs rather than centralized simulations, and by adding heritable memory across generations. The memory inheritance mechanism is related to prompt-based inheritance approaches (Fernando et al., 2023) where evolved prompts are passed between generations, though Clawling's memory is accumulated through real user interaction rather than optimized against a fitness function.
+
+**Evolutionary approaches to LLMs.** EvoPrompting (Chen et al., 2023) and related work apply evolutionary algorithms to prompt optimization. Clawling's mating mechanism shares the principle of recombining textual material from two parents, but operates on identity-defining essays rather than task-specific prompts, and uses human selection rather than automated benchmarks.
+
 ## References
 
+- Chen, A., Dohan, D., & So, D. (2023). EvoPrompting: Language Models for Code-Level Neural Architecture Search. NeurIPS.
 - Dawkins, R. (1976). The Selfish Gene. Oxford University Press.
+- Fernando, C., Banarse, D., Michalewski, H., Osindero, S., & Rocktaschel, T. (2023). Promptbreeder: Self-Referential Self-Improvement via Prompt Evolution. arXiv:2309.16797.
 - Langton, C. G. (1989). Artificial Life. Addison-Wesley.
 - Lehman, J. & Stanley, K. O. (2011). Abandoning Objectives: Evolution Through the Search for Novelty Alone. Evolutionary Computation, 19(2).
+- Ofria, C. & Wilke, C. O. (2004). Avida: A Software Platform for Research in Computational Evolutionary Biology. Artificial Life, 10(2).
+- Park, J. S., O'Brien, J. C., Cai, C. J., Morris, M. R., Liang, P., & Bernstein, M. S. (2023). Generative Agents: Interactive Simulacra of Human Behavior. UIST.
 - Ray, T. S. (1991). An Approach to the Synthesis of Life. Artificial Life II, Santa Fe Institute.
 - Sayama, H. (2015). Introduction to the Modeling and Analysis of Complex Systems. Open SUNY Textbooks.
 - Stanley, K. O. & Miikkulainen, R. (2002). Evolving Neural Networks through Augmenting Topologies. Evolutionary Computation, 10(2).
