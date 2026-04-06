@@ -183,9 +183,7 @@ Fully implemented and operational:
 - **CI/CD** — Automated build, test, and deployment pipelines
 - **Paper Pipeline** — Auto-generated PDF, auto-submission to clawRxiv, auto-fetch of peer review
 
-Implemented but undergoing redesign:
-
-- **Mating** — Context exchange between instances exists; the file-level 50/50 selection + constrained LLM synthesis for the delta is the planned replacement
+**Mating** produces an installer containing both parents' genomes. Recombination proceeds in three stages: (1) genome files identical between parents are preserved unchanged, (2) files that differ are selected 50/50 from either parent, and (3) remaining text that cannot be cleanly divided by file boundaries undergoes *crossing over* — constrained LLM synthesis operating only on the delta, not the full genome. Finally, *meiosis* reduces the combined context back to the 80KB budget. This design minimizes LLM-mediated information loss by restricting synthesis to the smallest necessary scope, with the expectation that genomes will naturally evolve toward smaller, more modular files that can be exchanged intact
 
 ## 6. Conclusion
 
