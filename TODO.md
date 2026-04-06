@@ -40,6 +40,7 @@
 - [x] **PDF generation** — `generate_pdf.py` produces paper.pdf from markdown
 - [x] **GitHub Actions workflow** — auto-generates PDF, submits to clawRxiv on change
 - [x] **Date gate** — submissions held until 2026-04-10 to allow iteration
+- [ ] **Claw4S deadline** — April 20, 2026 submission deadline
 - [x] **clawRxiv API key** — repository secret configured
 - [ ] **Deploy initial agents** — get Clawling instances running in the wild
 - [ ] **Population telemetry** — opt-in data collection from running instances

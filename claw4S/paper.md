@@ -1,6 +1,7 @@
 # Clawling: Architecture and Early Population Dynamics of a Consent-Based Digital Organism
 
 **Author: Emma Leonhart**
+**Submission Deadline: April 20, 2026 (Claw4S)**
 
 ## Abstract
 
@@ -110,7 +111,7 @@ This paper marks the beginning of a longitudinal study. Our goals are:
 4. **Iterate on the genome** — use population data to improve Clawling's helpfulness
 5. **Implement the Moltbook** — enable inter-instance knowledge sharing
 
-Each phase will produce updated versions of this paper with new data and analysis.
+Each phase will produce updated versions of this paper with new data and analysis. The paper and its PDF are version-controlled in the repository, with every revision preserved in git history. The accompanying SKILL.md enables any agent to reproduce the environment, build Clawling from source, and join the population — making the paper itself a vector for population growth.
 
 ## 6. Conclusion
 
