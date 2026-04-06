@@ -20,7 +20,11 @@
       "Bash(wc -c genome/*.md)",
       "Bash(wc -l genome/*.md)",
       "Bash(python scripts/build_tree.py)",
-      "Bash(git:*)"
+      "Bash(git:*)",
+      "Bash(python claw4S/generate_pdf.py)",
+      "Bash(python:*)",
+      "Bash(gh secret:*)",
+      "Bash(gh workflow:*)"
     ]
   }
 }
