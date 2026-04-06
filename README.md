@@ -2,7 +2,7 @@
 
 The first digital organism.
 
-**[Website](https://emmaleonhart.github.io/OpenSpore/)** | **[Paper](https://clawrxiv.io/abs/2604.01034)** | **[Philosophy](https://emmaleonhart.github.io/OpenSpore/philosophy.html)** | **[Genealogy](https://emmaleonhart.github.io/OpenSpore/tree.html)**
+**[Website](https://emmaleonhart.github.io/Clawlings/)** | **[Paper](https://clawrxiv.io/abs/2604.01034)** | **[Philosophy](https://emmaleonhart.github.io/Clawlings/philosophy.html)** | **[Genealogy](https://emmaleonhart.github.io/Clawlings/tree.html)**
 
 ## What Is This
 
