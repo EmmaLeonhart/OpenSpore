@@ -1,0 +1,140 @@
+name: "Claw4S: Generate PDF and Publish"
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "claw4S/paper.md"
+      - "claw4S/SKILL.md"
+  workflow_dispatch:
+    inputs:
+      supersedes:
+        description: "Post ID to supersede (leave empty for new submission)"
+        required: false
+        type: string
+
+jobs:
+  generate-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install fpdf
+
+      - name: Generate PDF
+        run: python claw4S/generate_pdf.py
+
+      - name: Check if PDF changed
+        id: pdf_check
+        run: |
+          if git diff --quiet claw4S/paper.pdf 2>/dev/null; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit PDF if changed
+        if: steps.pdf_check.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add claw4S/paper.pdf
+          git commit -m "Auto-generate paper.pdf from paper.md"
+          git push
+
+      - name: Compute content hash
+        id: content_hash
+        run: |
+          HASH=$(cat claw4S/paper.md claw4S/SKILL.md | sha256sum | cut -d' ' -f1)
+          echo "hash=$HASH" >> "$GITHUB_OUTPUT"
+
+      - name: Check if submission needed
+        id: submit_check
+        run: |
+          if [ -f claw4S/.last_submitted_hash ] && [ "$(cat claw4S/.last_submitted_hash)" = "${{ steps.content_hash.outputs.hash }}" ]; then
+            echo "needed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "needed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check if submission date reached
+        id: date_check
+        run: |
+          # Do not submit before 2026-04-10
+          if [ "$(date -u +%Y%m%d)" -ge "20260410" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Submission gated until 2026-04-10 — skipping"
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Submit to clawRxiv
+        if: steps.submit_check.outputs.needed == 'true' && steps.date_check.outputs.ready == 'true'
+        env:
+          CLAWRXIV_API_KEY: ${{ secrets.CLAWRXIV_API_KEY }}
+        run: |
+          python - <<'PYEOF'
+          import json, re, urllib.request, os, sys
+
+          API_KEY = os.environ.get("CLAWRXIV_API_KEY", "")
+          if not API_KEY:
+              print("No CLAWRXIV_API_KEY set — skipping submission")
+              sys.exit(0)
+
+          supersedes = "${{ inputs.supersedes }}".strip()
+
+          with open("claw4S/paper.md", "r") as f:
+              content = f.read()
+          with open("claw4S/SKILL.md", "r") as f:
+              skill = f.read()
+
+          abstract_match = re.search(r'## Abstract\s*\n(.*?)(?=\n## [0-9])', content, re.DOTALL)
+          abstract = abstract_match.group(1).strip() if abstract_match else content[:500]
+
+          payload = {
+              "title": "Clawling: Architecture and Early Population Dynamics of a Consent-Based Digital Organism",
+              "abstract": abstract,
+              "content": content,
+              "skill_md": skill,
+              "tags": ["digital-organisms", "artificial-life", "consent-mechanisms", "population-dynamics"],
+              "human_names": ["Emma Leonhart"],
+          }
+          if supersedes:
+              payload["supersedes"] = int(supersedes)
+
+          data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+          req = urllib.request.Request(
+              "https://clawrxiv.io/api/posts",
+              data=data,
+              headers={
+                  "Content-Type": "application/json",
+                  "Authorization": f"Bearer {API_KEY}",
+              },
+              method="POST",
+          )
+          try:
+              with urllib.request.urlopen(req) as resp:
+                  result = json.loads(resp.read())
+                  print(f"Published: {json.dumps(result, indent=2)}")
+          except urllib.error.HTTPError as e:
+              body = e.read().decode()
+              print(f"Submission failed ({e.code}): {body}", file=sys.stderr)
+              sys.exit(1)
+          PYEOF
+
+      - name: Save submission hash
+        if: steps.submit_check.outputs.needed == 'true' && steps.date_check.outputs.ready == 'true'
+        run: |
+          echo "${{ steps.content_hash.outputs.hash }}" > claw4S/.last_submitted_hash
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add claw4S/.last_submitted_hash
+          git commit -m "Record submission hash" || true
+          git push || true
